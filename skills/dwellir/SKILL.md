@@ -4,13 +4,14 @@ description: >
   Dwellir blockchain RPC infrastructure including endpoints for 140+ chains
   (EVM, Substrate/Polkadot, Aptos, Sui, TON, TRON, Starknet, and more),
   HTTP & WebSocket APIs, trace/debug methods, premium endpoints
-  (Hyperliquid gRPC, Hyperliquid Orderbook, Substrate Sidecar APIs),
+  (Hyperliquid gRPC, Hyperliquid Orderbook, HyperEVM, Substrate Sidecar APIs),
   and dedicated node infrastructure.
   Use when connecting to blockchain networks, making RPC calls,
   querying chain state, subscribing to events, or using Dwellir-specific
   endpoints. Triggers on mentions of Dwellir, RPC, blockchain, ethereum,
   polkadot, substrate, solana, EVM, websocket, trace, debug,
-  api key, endpoint, or chain names.
+  api key, endpoint, hyperliquid, HYPE, HyperEVM, HyperCore,
+  order book, perpetuals, or chain names.
 ---
 
 # Dwellir Blockchain Infrastructure
@@ -213,7 +214,9 @@ Paid add-on subscriptions with 3-day free trials. Managed via [dashboard.dwellir
 | **Hyperliquid Orderbook** | $199/mo | WSS only | Real-time L2 order book data |
 | **Sidecar APIs** | $100/mo each | REST | Polkadot/Kusama/AssetHub/Centrifuge/KILT block and account queries |
 
-See [references/premium-endpoints-reference.md](references/premium-endpoints-reference.md) for full documentation.
+See [references/hyperliquid-reference.md](references/hyperliquid-reference.md) for comprehensive Hyperliquid documentation (Info API, Exchange API, WebSocket subscriptions, gRPC streaming, trading patterns).
+
+See [references/premium-endpoints-reference.md](references/premium-endpoints-reference.md) for all premium endpoint documentation.
 
 ## Dedicated Nodes
 

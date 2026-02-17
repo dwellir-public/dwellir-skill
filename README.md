@@ -11,6 +11,7 @@ Skills are structured knowledge files that give AI coding agents (like Claude Co
 - Write correct code for EVM, Substrate/Polkadot, and non-EVM chains
 - Use trace/debug APIs for transaction analysis
 - Set up WebSocket subscriptions for real-time data
+- Build on Hyperliquid — gRPC streaming, order book data, Info/Exchange APIs, trading patterns
 - Work with premium endpoints (Hyperliquid gRPC, Orderbook, Sidecar APIs)
 - Follow best practices for retry logic, caching, and connection management
 
@@ -37,6 +38,8 @@ Once installed, the skill activates automatically when you mention blockchain-re
 - "Connect to Moonbeam and read a smart contract"
 - "What Substrate parachains does Dwellir support?"
 - "Set up a multi-chain provider for Ethereum, Polygon, and Arbitrum"
+- "Stream Hyperliquid order book data via WebSocket"
+- "Build a funding rate monitor for Hyperliquid perpetuals"
 
 ## Dwellir Integration
 
@@ -79,7 +82,8 @@ dwellir-skill/
 │       └── references/
 │           ├── rpc-reference.md              # EVM + general RPC methods
 │           ├── substrate-reference.md        # Polkadot/Substrate ecosystem
-│           └── premium-endpoints-reference.md # Hyperliquid, Sidecar, dedicated nodes
+│           ├── hyperliquid-reference.md      # Hyperliquid L1, HyperEVM, trading APIs
+│           └── premium-endpoints-reference.md # Sidecar, dedicated nodes, pricing
 ├── README.md
 ├── LICENSE.md
 └── .gitignore
