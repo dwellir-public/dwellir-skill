@@ -1,0 +1,23 @@
+{
+  "name": "blockchain-skills",
+  "owner": {
+    "name": "Dwellir",
+    "url": "https://www.dwellir.com"
+  },
+  "metadata": {
+    "description": "Blockchain RPC skills for Claude Code — 140+ chains, Polkadot ecosystem, EVM networks, and more",
+    "version": "1.0.0",
+    "repository": "https://github.com/dwellir-public/blockchain-skills"
+  },
+  "plugins": [
+    {
+      "name": "blockchain-skills",
+      "description": "Blockchain RPC skills for developers and AI agents: Dwellir infrastructure, 140+ chain endpoints, Polkadot/Substrate ecosystem, EVM networks, trace/debug APIs, WebSocket subscriptions, and premium endpoints",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/dwellir-rpc"
+      ]
+    }
+  ]
+}
