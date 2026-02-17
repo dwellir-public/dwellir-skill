@@ -400,6 +400,17 @@ conn, err := grpc.Dial(
 
 Real-time L2 order book data served by Dwellir's [order book server](https://github.com/dwellir-public/hyperliquid-orderbook-server), which reads Hypercore data directly from disk. **WSS only** — HTTP requests are not supported.
 
+### Why Dwellir's Orderbook vs Public Hyperliquid
+
+| Feature | Dwellir Orderbook | Public Hyperliquid WS |
+|---------|-------------------|----------------------|
+| **Book depth** | Up to **100 levels** per side (configurable via `n_levels`) | Max 20 levels per side |
+| **Spot markets** | Yes — perpetuals, spot (`@{index}`), and HIP-3 DEX tokens | Perpetuals only on public l2Book |
+| **HIP-3 DEX markets** | Yes — all builder-deployed perp markets | Limited |
+| **Rate limits** | API key-based, no IP limits | Introducing IP-based rate limits |
+| **L4 full book** | Yes — complete order-level diffs | Not available on public WS |
+| **Infrastructure** | Dedicated edge servers (Singapore, Tokyo) | Shared public endpoint |
+
 ### Endpoint
 
 ```
@@ -407,6 +418,14 @@ WSS: wss://api-hyperliquid-mainnet-orderbook.n.dwellir.com/{API_KEY}
 ```
 
 3-day free trial available.
+
+### Subscription Types
+
+| Type | Description |
+|------|-------------|
+| `l2Book` | Aggregated order book with configurable depth (up to 100 levels) |
+| `l4Book` | Full order book with individual order diffs |
+| `trades` | Trade stream (perpetuals and spot when enabled) |
 
 ### Benchmarked Message Rates
 
@@ -423,9 +442,10 @@ const ws = new WebSocket(
 );
 
 ws.on('open', () => {
+  // Subscribe with 100 levels of depth (default: 20, max: 100)
   ws.send(JSON.stringify({
     method: 'subscribe',
-    subscription: { type: 'l2Book', coin: 'ETH' }
+    subscription: { type: 'l2Book', coin: 'ETH', n_levels: 100 }
   }));
 });
 
@@ -436,6 +456,18 @@ ws.on('message', (data) => {
   console.log('Book update:', update);
 });
 
+// Subscribe to a spot market
+ws.send(JSON.stringify({
+  method: 'subscribe',
+  subscription: { type: 'l2Book', coin: '@107' } // spot token by index
+}));
+
+// Subscribe to a HIP-3 DEX market
+ws.send(JSON.stringify({
+  method: 'subscribe',
+  subscription: { type: 'l2Book', coin: 'xyz:XYZ100' }
+}));
+
 // Unsubscribe
 ws.send(JSON.stringify({
   method: 'unsubscribe',
@@ -445,10 +477,10 @@ ws.send(JSON.stringify({
 
 ### Use Cases
 
-- Market making — monitor spreads and depth in real-time
-- Arbitrage — compare order books across venues
-- Liquidity analysis — track depth changes over time
-- Trading signals — detect large order placement/removal
+- Market making — 100-level depth gives full picture of liquidity
+- Arbitrage — compare order books across venues with deeper data
+- Liquidity analysis — track depth changes across spot, perp, and HIP-3 markets
+- Trading signals — detect large order placement/removal deeper in the book
 
 ## Dedicated Nodes
 
