@@ -1,3 +1,16 @@
+---
+name: substrate
+description: >
+  Substrate and Polkadot ecosystem reference for Dwellir endpoints — 30+ parachains,
+  @polkadot/api connection setup, core RPC methods (system_*, chain_*, state_*, author_*),
+  storage queries, WebSocket subscriptions, Sidecar REST APIs, and best practices.
+  Use when working with Polkadot, Kusama, Substrate chains, parachains,
+  extrinsics, or Sidecar REST endpoints through Dwellir.
+  Triggers on mentions of polkadot, kusama, substrate, parachain, xcm,
+  moonbeam, astar, acala, @polkadot/api, extrinsic, pallet, GRANDPA,
+  sidecar, asset hub, bridge hub, or Substrate chain names.
+---
+
 # Substrate / Polkadot Ecosystem Reference
 
 Complete reference for Dwellir's Substrate and Polkadot ecosystem endpoints — 30+ parachains, core RPC methods, storage queries, WebSocket subscriptions, Sidecar REST APIs, and best practices.
@@ -374,14 +387,14 @@ const blockNumber = await provider.getBlockNumber();
 console.log(`Moonbeam block: ${blockNumber}`);
 ```
 
-## Sidecar REST API (Premium)
+## Sidecar REST API (Premium — $100/mo per chain)
 
-Substrate API Sidecar provides a REST interface for querying Substrate chain data. Available as a **$100/mo add-on** per chain.
+Substrate API Sidecar provides a REST interface for querying Substrate chain data. Available as a paid add-on with a 3-day free trial.
 
 ### Available Sidecar Endpoints
 
-| Chain | Host Slug |
-|-------|-----------|
+| Chain | Endpoint Slug |
+|-------|---------------|
 | Polkadot | `api-polkadot-sidecar` |
 | Kusama | `api-kusama-sidecar` |
 | Asset Hub Polkadot | `api-asset-hub-polkadot-sidecar` |
@@ -397,17 +410,25 @@ https://api-{chain}-sidecar.n.dwellir.com/{API_KEY}
 
 ### Key Sidecar Routes
 
-| Route | Description |
-|-------|-------------|
-| `GET /blocks/{blockId}` | Block details by number or hash |
-| `GET /blocks/head` | Latest block |
-| `GET /accounts/{accountId}/balance-info` | Account balance |
-| `GET /accounts/{accountId}/staking-info` | Staking details |
-| `GET /pallets/{palletId}/storage` | Pallet storage items |
-| `GET /pallets/{palletId}/storage/{storageItemId}` | Specific storage value |
-| `GET /transaction/material` | Data needed to construct transactions |
-| `GET /runtime/metadata` | Runtime metadata |
-| `GET /node/version` | Node version info |
+| Route | Method | Description |
+|-------|--------|-------------|
+| `/blocks/head` | GET | Latest block with extrinsics and events |
+| `/blocks/{blockId}` | GET | Block by number or hash |
+| `/blocks/head/header` | GET | Latest block header only |
+| `/accounts/{accountId}/balance-info` | GET | Free, reserved, frozen balances |
+| `/accounts/{accountId}/staking-info` | GET | Staking status, nominations, rewards |
+| `/accounts/{accountId}/staking-payouts` | GET | Staking payout history |
+| `/accounts/{accountId}/vesting-info` | GET | Vesting schedules |
+| `/pallets/{palletId}/storage` | GET | List storage items for pallet |
+| `/pallets/{palletId}/storage/{storageItemId}` | GET | Specific storage value |
+| `/pallets/{palletId}/errors` | GET | Pallet error definitions |
+| `/pallets/{palletId}/constants` | GET | Pallet constants |
+| `/transaction/material` | GET | Chain metadata for offline tx construction |
+| `/transaction/fee-estimate` | POST | Estimate fee for a transaction |
+| `/runtime/metadata` | GET | Full runtime metadata |
+| `/runtime/spec` | GET | Runtime spec version |
+| `/node/version` | GET | Node software version |
+| `/node/network` | GET | Network info (chain, peers) |
 
 ### Sidecar Examples
 
@@ -426,9 +447,26 @@ curl "https://api-polkadot-sidecar.n.dwellir.com/${DWELLIR_API_KEY}/accounts/{ac
 
 # Get pallet storage
 curl "https://api-polkadot-sidecar.n.dwellir.com/${DWELLIR_API_KEY}/pallets/staking/storage/activeEra"
+
+# Get transaction material
+curl "https://api-polkadot-sidecar.n.dwellir.com/${DWELLIR_API_KEY}/transaction/material"
 ```
 
-See [references/premium-endpoints-reference.md](references/premium-endpoints-reference.md) for full premium endpoint documentation.
+### Sidecar Code Example
+
+```typescript
+const SIDECAR_URL = `https://api-polkadot-sidecar.n.dwellir.com/${process.env.DWELLIR_API_KEY}`;
+
+// Get account balance
+const response = await fetch(`${SIDECAR_URL}/accounts/${accountId}/balance-info`);
+const balance = await response.json();
+console.log(`Free: ${balance.free}, Reserved: ${balance.reserved}`);
+
+// Get latest block
+const blockResponse = await fetch(`${SIDECAR_URL}/blocks/head`);
+const block = await blockResponse.json();
+console.log(`Block #${block.number}: ${block.extrinsics.length} extrinsics`);
+```
 
 ## Best Practices
 

@@ -1,4 +1,18 @@
-# RPC Endpoints Reference
+---
+name: evm
+description: >
+  EVM blockchain RPC reference for Dwellir endpoints — Ethereum JSON-RPC methods,
+  connection setup (ethers.js, viem, web3.js, web3.py), debug/trace APIs,
+  WebSocket subscriptions, batch requests, non-EVM chain patterns
+  (Aptos, Sui, TON, TRON, Starknet), and best practices.
+  Use when working with EVM chains, Ethereum, eth_ methods, Solidity contracts,
+  gas estimation, transaction tracing, or EVM L2 rollups through Dwellir.
+  Triggers on mentions of EVM, ethereum, eth_, solidity, ethers, viem, web3,
+  debug_trace, callTracer, gas, ERC-20, smart contract, or EVM chain names
+  (Arbitrum, Base, Polygon, Optimism, etc.).
+---
+
+# EVM RPC Endpoints Reference
 
 Complete reference for Dwellir's JSON-RPC endpoints covering EVM chains, debug/trace APIs, WebSocket subscriptions, batch requests, non-EVM chains, and best practices.
 

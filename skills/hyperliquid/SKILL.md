@@ -1,3 +1,17 @@
+---
+name: hyperliquid
+description: >
+  Hyperliquid L1 reference for Dwellir endpoints — HyperEVM JSON-RPC, Info API proxy,
+  gRPC L1 streaming, order book WebSocket, dedicated nodes, and trading patterns.
+  Covers HyperCore trading layer, HyperEVM smart contracts (chain ID 998),
+  market data queries, perpetuals metadata, spot markets, and best practices.
+  Use when working with Hyperliquid, HYPE, HyperEVM, HyperCore,
+  perpetual futures, order books, funding rates, or Hyperliquid trading through Dwellir.
+  Triggers on mentions of hyperliquid, HYPE, HyperEVM, HyperCore,
+  order book, perpetuals, funding rate, l2Book, l4Book, gRPC streaming,
+  nanoreth, or hyperliquid trading.
+---
+
 # Hyperliquid Reference
 
 Complete reference for building on Hyperliquid through Dwellir — HyperEVM JSON-RPC, Info API proxy, gRPC L1 streaming, order book WebSocket, and dedicated nodes.

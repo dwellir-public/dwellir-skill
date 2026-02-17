@@ -11,7 +11,7 @@ Skills are structured knowledge files that give AI coding agents (like Claude Co
 - Write correct code for EVM, Substrate/Polkadot, and non-EVM chains
 - Use trace/debug APIs for transaction analysis
 - Set up WebSocket subscriptions for real-time data
-- Build on Hyperliquid — gRPC streaming, order book data, Info/Exchange APIs, trading patterns
+- Build on Hyperliquid — gRPC streaming, order book data, Info API, trading patterns
 - Work with premium endpoints (Hyperliquid gRPC, Orderbook, Sidecar APIs)
 - Follow best practices for retry logic, caching, and connection management
 
@@ -19,7 +19,12 @@ Skills are structured knowledge files that give AI coding agents (like Claude Co
 
 | Skill | Description |
 |-------|-------------|
-| **dwellir** | Dwellir blockchain RPC infrastructure — 140+ chains, EVM & Substrate endpoints, trace/debug APIs, WebSocket subscriptions, premium endpoints, and dedicated nodes |
+| **dwellir** | Hub skill — Dwellir platform overview, 140+ chains, endpoint format, pricing, API key setup, best practices, and dedicated nodes |
+| **evm** | EVM RPC reference — Ethereum JSON-RPC methods, ethers.js/viem/web3 setup, debug/trace APIs, WebSocket subscriptions, non-EVM chains (Aptos, Sui, TON, TRON, Starknet) |
+| **substrate** | Substrate/Polkadot reference — 30+ parachains, @polkadot/api setup, storage queries, subscriptions, Sidecar REST APIs |
+| **hyperliquid** | Hyperliquid L1 reference — HyperEVM, Info API proxy, gRPC streaming, order book WebSocket, trading patterns, dedicated nodes |
+
+Skills are loaded independently based on context. Mention "Ethereum" or "ethers.js" and the **evm** skill activates. Mention "Polkadot" or "parachain" and the **substrate** skill activates. Mention "Hyperliquid" or "order book" and the **hyperliquid** skill activates.
 
 ## Installation
 
@@ -29,7 +34,7 @@ npx skills add dwellir-public/dwellir-skill
 
 ## Usage
 
-Once installed, the skill activates automatically when you mention blockchain-related topics. Example prompts:
+Once installed, skills activate automatically when you mention blockchain-related topics. Example prompts:
 
 - "Get the ETH balance for this wallet using Dwellir"
 - "Set up a WebSocket subscription for new Ethereum blocks"
@@ -40,6 +45,7 @@ Once installed, the skill activates automatically when you mention blockchain-re
 - "Set up a multi-chain provider for Ethereum, Polygon, and Arbitrum"
 - "Stream Hyperliquid order book data via WebSocket"
 - "Build a funding rate monitor for Hyperliquid perpetuals"
+- "Query Hyperliquid positions through the Info API"
 
 ## Dwellir Integration
 
@@ -63,7 +69,7 @@ Real-time data via WSS — new blocks, pending transactions, contract events, st
 ### Premium Endpoints
 
 - **Hyperliquid gRPC** ($299/mo) — high-frequency trading data streaming
-- **Hyperliquid Orderbook** ($199/mo) — real-time L2 order book via WSS
+- **Hyperliquid Orderbook** ($199/mo) — real-time L2 order book via WSS (100 levels depth, spot & HIP-3 support)
 - **Sidecar REST APIs** ($100/mo each) — Polkadot, Kusama, AssetHub, Centrifuge, KILT
 
 ### Dedicated Nodes
@@ -75,15 +81,16 @@ Single-tenant infrastructure for Ethereum, Base, BSC, Hyperliquid, Monad, EOS, W
 ```
 dwellir-skill/
 ├── .claude-plugin/
-│   └── marketplace.json          # Plugin manifest
+│   └── marketplace.json              # Plugin manifest
 ├── skills/
-│   └── dwellir/
-│       ├── SKILL.md              # Main skill definition
-│       └── references/
-│           ├── rpc-reference.md              # EVM + general RPC methods
-│           ├── substrate-reference.md        # Polkadot/Substrate ecosystem
-│           ├── hyperliquid-reference.md      # Hyperliquid L1, HyperEVM, trading APIs
-│           └── premium-endpoints-reference.md # Sidecar, dedicated nodes, pricing
+│   ├── dwellir/
+│   │   └── SKILL.md                  # Hub skill — platform overview, pricing, setup
+│   ├── evm/
+│   │   └── SKILL.md                  # EVM chains — JSON-RPC, trace/debug, WebSocket
+│   ├── substrate/
+│   │   └── SKILL.md                  # Polkadot/Substrate — parachains, Sidecar REST
+│   └── hyperliquid/
+│       └── SKILL.md                  # Hyperliquid — Info API, gRPC, orderbook, trading
 ├── README.md
 ├── LICENSE.md
 └── .gitignore
@@ -98,7 +105,7 @@ dwellir-skill/
    export DWELLIR_API_KEY="your-uuid-key"
    export DWELLIR_RPC_URL="https://api-ethereum-mainnet.n.dwellir.com/${DWELLIR_API_KEY}"
    ```
-4. **Start building** — the skill handles the rest
+4. **Start building** — the skills handle the rest
 
 ## Contributing
 

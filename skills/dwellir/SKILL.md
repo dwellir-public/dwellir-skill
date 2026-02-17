@@ -8,13 +8,21 @@ description: >
   and dedicated node infrastructure.
   Use when connecting to blockchain networks, making RPC calls,
   querying chain state, subscribing to events, or using Dwellir-specific
-  endpoints. Triggers on mentions of Dwellir, RPC, blockchain, ethereum,
-  polkadot, substrate, solana, EVM, websocket, trace, debug,
-  api key, endpoint, hyperliquid, HYPE, HyperEVM, HyperCore,
-  order book, perpetuals, or chain names.
+  endpoints. Triggers on mentions of Dwellir, RPC, blockchain,
+  api key, endpoint, or chain names.
 ---
 
 # Dwellir Blockchain Infrastructure
+
+## Related Skills
+
+For detailed chain-specific references, load the relevant skill:
+
+| Skill | Use When |
+|-------|----------|
+| **evm** | Working with EVM chains (Ethereum, Arbitrum, Base, Polygon, etc.), eth_ methods, Solidity, trace/debug APIs |
+| **substrate** | Working with Polkadot, Kusama, parachains, @polkadot/api, Sidecar REST APIs |
+| **hyperliquid** | Working with Hyperliquid L1, HyperEVM, Info API, gRPC streaming, order book data |
 
 ## Intake Questions
 - Which chain and network should Dwellir target?
@@ -133,77 +141,6 @@ Extra credits: $5/M (Developer), $3/M (Growth), $2/M (Scale). Spending limits co
 
 Current pricing: [dwellir.com/docs/getting-started/pricing](https://www.dwellir.com/docs/getting-started/pricing)
 
-## Trace & Debug APIs
-
-Available on Developer plan and above. Archive nodes are used automatically for historical data.
-
-### Supported Methods
-
-| Method | Description |
-|--------|-------------|
-| `debug_traceTransaction` | Trace a single transaction by hash |
-| `debug_traceBlockByNumber` | Trace all transactions in a block |
-| `debug_traceCall` | Trace a call without submitting it |
-| `trace_transaction` | Parity/OpenEthereum-style trace |
-| `trace_block` | Trace all transactions in a block (Parity) |
-
-### Tracer Types
-
-| Tracer | Use Case |
-|--------|----------|
-| `callTracer` | Execution call tree — type, addresses, gas, errors |
-| `prestateTracer` | State before execution — balances, code, storage, nonce |
-| `4byteTracer` | Function signature identification — 4-byte selectors to call counts |
-| Custom JS tracer | Developer-defined analysis logic |
-
-### Example
-
-```bash
-curl -X POST ${DWELLIR_RPC_URL} \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "debug_traceTransaction",
-    "params": ["0xTXHASH", {"tracer": "callTracer"}],
-    "id": 1
-  }'
-```
-
-See [references/rpc-reference.md](references/rpc-reference.md) for complete trace/debug documentation.
-
-## WebSocket Subscriptions
-
-Available on all endpoints via `wss://` protocol.
-
-### EVM Subscriptions
-
-```javascript
-// ethers.js WebSocket
-import { WebSocketProvider } from 'ethers';
-const provider = new WebSocketProvider(process.env.DWELLIR_WSS_URL);
-
-// Subscribe to new blocks
-provider.on('block', (blockNumber) => {
-  console.log('New block:', blockNumber);
-});
-
-// Subscribe to pending transactions
-provider.on('pending', (txHash) => {
-  console.log('Pending tx:', txHash);
-});
-```
-
-### Substrate Subscriptions
-
-```typescript
-// Subscribe to new finalized heads
-const unsub = await api.rpc.chain.subscribeFinalizedHeads((header) => {
-  console.log(`Finalized block #${header.number}`);
-});
-```
-
-See [references/substrate-reference.md](references/substrate-reference.md) for Substrate-specific patterns.
-
 ## Premium Endpoints
 
 Paid add-on subscriptions with 3-day free trials. Managed via [dashboard.dwellir.com](https://dashboard.dwellir.com).
@@ -213,10 +150,6 @@ Paid add-on subscriptions with 3-day free trials. Managed via [dashboard.dwellir
 | **Hyperliquid gRPC** | $299/mo | gRPC | High-frequency trading, streaming |
 | **Hyperliquid Orderbook** | $199/mo | WSS only | Real-time L2 order book data |
 | **Sidecar APIs** | $100/mo each | REST | Polkadot/Kusama/AssetHub/Centrifuge/KILT block and account queries |
-
-See [references/hyperliquid-reference.md](references/hyperliquid-reference.md) for comprehensive Hyperliquid documentation (Info API, Exchange API, WebSocket subscriptions, gRPC streaming, trading patterns).
-
-See [references/premium-endpoints-reference.md](references/premium-endpoints-reference.md) for all premium endpoint documentation.
 
 ## Dedicated Nodes
 
@@ -235,50 +168,6 @@ Single-tenant blockchain infrastructure for production workloads.
 | Acala | $248 |
 
 Contact sales or subscribe via [dashboard.dwellir.com](https://dashboard.dwellir.com).
-
-## Common Patterns
-
-### Multi-Chain Setup
-
-```typescript
-const chains = {
-  ethereum: `https://api-ethereum-mainnet.n.dwellir.com/${process.env.DWELLIR_API_KEY}`,
-  polygon: `https://api-polygon-mainnet.n.dwellir.com/${process.env.DWELLIR_API_KEY}`,
-  arbitrum: `https://api-arbitrum-mainnet.n.dwellir.com/${process.env.DWELLIR_API_KEY}`,
-};
-```
-
-### Transaction Monitoring (EVM)
-
-```typescript
-import { WebSocketProvider, formatEther } from 'ethers';
-const provider = new WebSocketProvider(
-  `wss://api-ethereum-mainnet.n.dwellir.com/${process.env.DWELLIR_API_KEY}`
-);
-
-provider.on('block', async (blockNumber) => {
-  const block = await provider.getBlock(blockNumber, true);
-  for (const tx of block.prefetchedTransactions) {
-    if (tx.to === TARGET_ADDRESS) {
-      console.log(`Incoming: ${formatEther(tx.value)} ETH`);
-    }
-  }
-});
-```
-
-### Polkadot Parachain Query
-
-```typescript
-import { ApiPromise, WsProvider } from '@polkadot/api';
-const api = await ApiPromise.create({
-  provider: new WsProvider(
-    `wss://api-polkadot.n.dwellir.com/${process.env.DWELLIR_API_KEY}`
-  ),
-});
-
-const balance = await api.query.system.account(address);
-console.log(`Free: ${balance.data.free.toHuman()}`);
-```
 
 ## Best Practices
 
