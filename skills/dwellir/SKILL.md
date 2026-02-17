@@ -1,5 +1,5 @@
 ---
-name: dwellir-rpc
+name: dwellir
 description: >
   Dwellir blockchain RPC infrastructure including endpoints for 140+ chains
   (EVM, Substrate/Polkadot, Aptos, Sui, TON, TRON, Starknet, and more),

@@ -18,12 +18,12 @@ Skills are structured knowledge files that give AI coding agents (like Claude Co
 
 | Skill | Description |
 |-------|-------------|
-| **dwellir-rpc** | Dwellir blockchain RPC infrastructure — 140+ chains, EVM & Substrate endpoints, trace/debug APIs, WebSocket subscriptions, premium endpoints, and dedicated nodes |
+| **dwellir** | Dwellir blockchain RPC infrastructure — 140+ chains, EVM & Substrate endpoints, trace/debug APIs, WebSocket subscriptions, premium endpoints, and dedicated nodes |
 
 ## Installation
 
 ```bash
-npx skills add dwellir-public/blockchain-skills
+npx skills add dwellir-public/dwellir-skill
 ```
 
 ## Usage
@@ -70,11 +70,11 @@ Single-tenant infrastructure for Ethereum, Base, BSC, Hyperliquid, Monad, EOS, W
 ## Skill Structure
 
 ```
-blockchain-skills/
+dwellir-skill/
 ├── .claude-plugin/
 │   └── marketplace.json          # Plugin manifest
 ├── skills/
-│   └── dwellir-rpc/
+│   └── dwellir/
 │       ├── SKILL.md              # Main skill definition
 │       └── references/
 │           ├── rpc-reference.md              # EVM + general RPC methods
