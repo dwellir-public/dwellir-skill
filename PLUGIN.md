@@ -29,7 +29,7 @@ No local MCP process or manually supplied API key is required.
 1. Deploy and test the coordinated backend, dashboard, MCP, and CLI releases.
 2. Register the HTTPS MCP endpoint through ChatGPT developer mode.
 3. Add the assigned connection ID through `.app.json` and the manifest's `apps` field.
-4. Add verified privacy, terms, support, logo, and screenshot metadata.
+4. Review the existing privacy, terms, support, and logo metadata; add screenshots from the tested integration.
 5. Test the archive in both target clients with a reviewer account.
 6. Submit the Dwellir listing after release approval.
 

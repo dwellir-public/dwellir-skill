@@ -16,6 +16,7 @@ if output.exists():
     shutil.rmtree(output)
 output.mkdir(parents=True)
 shutil.copytree(root / ".codex-plugin", output / ".codex-plugin")
+shutil.copytree(root / "assets", output / "assets")
 shutil.copytree(root / "skills", output / "skills", ignore=shutil.ignore_patterns("hyperliquid"))
 with tempfile.TemporaryDirectory() as temporary:
     checkout = Path(temporary) / "hyperliquid"
