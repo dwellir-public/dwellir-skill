@@ -1,5 +1,7 @@
 # Dwellir Blockchain Skills
 
+For the hosted Dwellir plugin package, see [PLUGIN.md](PLUGIN.md).
+
 AI agent skills for blockchain development, powered by [Dwellir](https://www.dwellir.com).
 
 ## What are Skills?
