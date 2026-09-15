@@ -7,7 +7,7 @@ description: Connect Dwellir accounts, inspect RPC usage, manage API keys, query
 
 Use the hosted Dwellir MCP tools for account access and bounded chain queries.
 Use the CLI to configure credentials for projects that run independently.
-For Hyperliquid architecture, trading patterns, and streaming protocols, load the bundled `hyperliquid` skill.
+For Hyperliquid market data and streaming protocols, load the bundled `hyperliquid-data` skill.
 For detailed EVM or Substrate references, load `evm` or `substrate` when available.
 
 ## Connect and query
@@ -23,7 +23,7 @@ Users can create a Dwellir account during browser login.
 
 1. Discover the chain, network, node type, and transport with `list_endpoints`.
 2. Use `list_keys` to select an enabled key by name and non-secret reference.
-3. Create a named key with `create_key` when the task requires one.
+3. Create a named key with `create_key` when the task requires one and the connection has **Manage keys** access.
 4. Use `rpc_methods` before `rpc_call`; supported methods vary by endpoint.
 5. Use `hyperliquid_info` for supported Info queries and `capture_stream` for short WebSocket samples.
 6. Use `usage_summary` or `usage_history` to inspect account consumption.
@@ -32,11 +32,19 @@ Queries consume the connected account's quota.
 Direct tools keep API key values on Dwellir servers.
 A key reference identifies a key within MCP; it is not a credential for application code.
 Disabling or deleting a key interrupts projects that use it.
+With **Read only** access, stop before key mutations. Explain how the user can reconnect with **Manage keys**.
+Do not use CLI credentials or another route to bypass the connection's permissions.
+Key-management permission applies to Dwellir API keys, not wallet signing or blockchain transactions.
+This package does not execute trades, transfer assets, sign transactions, or automate trading.
 
 ## Configure a project
 
 Check `dwellir --version` and `dwellir project setup --help` first.
-If the command is unavailable, follow the current installation instructions at https://github.com/dwellir-public/cli.
+Project setup requires a published CLI release of 0.2.0 or later and successful command-help output.
+Verify the installed version exists at https://github.com/dwellir-public/cli/releases, even when local help succeeds.
+An unreleased local build does not satisfy this requirement.
+If no released version provides it, stop setup and report the limitation. Do not install an unreleased branch.
+Use an existing application secret store only when the user already configured credentials there.
 Do not invent installation commands or package names.
 
 Run `dwellir auth login` for a local browser callback.
@@ -62,7 +70,7 @@ Do not print, read back into chat, commit, or pass raw credentials as command ar
 For hosted projects, use the deployment provider's secret store.
 
 Verify configuration through a bounded chain request that reports only the result.
-For continuous streams, gRPC, or unsupported methods, build application code using the canonical protocol references.
+For continuous streams, gRPC, or read methods outside MCP, build application code using the protocol references.
 The MCP provides short samples, not persistent subscriptions.
 
 ## Current documentation

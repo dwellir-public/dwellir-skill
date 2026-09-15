@@ -1,8 +1,8 @@
 ---
 name: substrate
 description: >
-  Substrate and Polkadot ecosystem reference for Dwellir endpoints — 30+ parachains,
-  @polkadot/api connection setup, core RPC methods (system_*, chain_*, state_*, author_*),
+  Use when reading Substrate and Polkadot data through Dwellir endpoints:
+  @polkadot/api connection setup, core RPC methods (system_*, chain_*, state_*),
   storage queries, WebSocket subscriptions, Sidecar REST APIs, and best practices.
   Use when working with Polkadot, Kusama, Substrate chains, parachains,
   extrinsics, or Sidecar REST endpoints through Dwellir.
@@ -13,7 +13,13 @@ description: >
 
 # Substrate / Polkadot Ecosystem Reference
 
-Complete reference for Dwellir's Substrate and Polkadot ecosystem endpoints — 30+ parachains, core RPC methods, storage queries, WebSocket subscriptions, Sidecar REST APIs, and best practices.
+Use Dwellir for blockchain reads, storage queries, and read-only application development.
+This skill does not sign or submit extrinsics, transfer assets, or modify node keys.
+An existing wallet or a rejected MCP method does not authorize an alternate execution route.
+
+Discover endpoints with `list_endpoints` and supported MCP methods with `rpc_methods` before calling `rpc_call`.
+The direct RPC examples below describe application code; MCP supports a smaller method set.
+Read credentials from environment variables or a secret store. Never print authenticated URLs or raw connection errors.
 
 ## Overview
 
@@ -67,9 +73,10 @@ use subxt::{OnlineClient, PolkadotConfig};
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let api_key = std::env::var("DWELLIR_API_KEY")?;
     let url = format!("wss://api-polkadot.n.dwellir.com/{}", api_key);
-    let api = OnlineClient::<PolkadotConfig>::from_url(&url).await?;
+    let api = OnlineClient::<PolkadotConfig>::from_url(&url)
+        .await.map_err(|_| "Dwellir connection failed")?;
 
-    let block = api.blocks().at_latest().await?;
+    let block = api.blocks().at_latest().await.map_err(|_| "Dwellir block query failed")?;
     println!("Latest block: #{}", block.number());
     Ok(())
 }
@@ -78,6 +85,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Raw WebSocket
 
 ```javascript
+import WebSocket from 'ws';
+
 const ws = new WebSocket(
   `wss://api-polkadot.n.dwellir.com/${process.env.DWELLIR_API_KEY}`
 );
@@ -94,14 +103,6 @@ ws.on('open', () => {
 ws.on('message', (data) => {
   console.log(JSON.parse(data));
 });
-```
-
-### curl (HTTP)
-
-```bash
-curl -X POST "https://api-polkadot.n.dwellir.com/${DWELLIR_API_KEY}" \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","method":"chain_getBlock","params":[],"id":1}'
 ```
 
 ## Supported Parachains
@@ -183,17 +184,6 @@ Full and current list: [dwellir.com/docs/getting-started/supported-chains](https
 | `state_getKeysPaged` | Paginated storage key listing | `[prefix, count, startKey?, blockHash?]` |
 | `state_call` | Execute a runtime API call | `[method, data, blockHash?]` |
 
-### author_* — Transaction Submission
-
-| Method | Description | Params |
-|--------|-------------|--------|
-| `author_submitExtrinsic` | Submit a signed extrinsic | `[extrinsic]` |
-| `author_submitAndWatchExtrinsic` | Submit and watch status (WSS) | `[extrinsic]` |
-| `author_pendingExtrinsics` | List pending extrinsics in pool | `[]` |
-| `author_rotateKeys` | Generate new session keys | `[]` |
-| `author_hasSessionKeys` | Check if node has session keys | `[sessionKeys]` |
-| `author_insertKey` | Insert a key into the keystore | `[keyType, suri, publicKey]` |
-
 ### grandpa_* — Finality
 
 | Method | Description |
@@ -235,16 +225,13 @@ validators.forEach(([key, prefs]) => {
 
 ### Raw Storage Query
 
-```bash
-# Get storage key for System.Account
-curl -X POST "https://api-polkadot.n.dwellir.com/${DWELLIR_API_KEY}" \
-  -H "Content-Type: application/json" \
-  -d '{
+```json
+{
     "jsonrpc": "2.0",
     "method": "state_getStorage",
     "params": ["0x26aa394eea5630e07c48ae0c9558cef7b99d880ec681799c0cf30e8886371da9..."],
     "id": 1
-  }'
+  }
 ```
 
 ## Runtime Calls
@@ -324,23 +311,6 @@ const unsub = await api.query.system.events((events) => {
 
 ## Code Examples
 
-### Transfer DOT
-
-```typescript
-import { ApiPromise, WsProvider, Keyring } from '@polkadot/api';
-
-const api = await ApiPromise.create({
-  provider: new WsProvider(`wss://api-polkadot.n.dwellir.com/${process.env.DWELLIR_API_KEY}`),
-});
-
-const keyring = new Keyring({ type: 'sr25519' });
-const sender = keyring.addFromUri('//Alice'); // Use actual key in production
-
-const transfer = api.tx.balances.transferKeepAlive(recipient, amount);
-const hash = await transfer.signAndSend(sender);
-console.log(`Transfer submitted: ${hash.toHex()}`);
-```
-
 ### Query Staking Info
 
 ```typescript
@@ -387,9 +357,9 @@ const blockNumber = await provider.getBlockNumber();
 console.log(`Moonbeam block: ${blockNumber}`);
 ```
 
-## Sidecar REST API (Premium — $100/mo per chain)
+## Sidecar REST API
 
-Substrate API Sidecar provides a REST interface for querying Substrate chain data. Available as a paid add-on with a 3-day free trial.
+Substrate API Sidecar provides a REST interface for querying chain data. Availability depends on the account and endpoint.
 
 ### Available Sidecar Endpoints
 
@@ -423,34 +393,11 @@ https://api-{chain}-sidecar.n.dwellir.com/{API_KEY}
 | `/pallets/{palletId}/storage/{storageItemId}` | GET | Specific storage value |
 | `/pallets/{palletId}/errors` | GET | Pallet error definitions |
 | `/pallets/{palletId}/constants` | GET | Pallet constants |
-| `/transaction/material` | GET | Chain metadata for offline tx construction |
-| `/transaction/fee-estimate` | POST | Estimate fee for a transaction |
+| `/transaction/fee-estimate` | POST | Estimate fee without submitting a transaction |
 | `/runtime/metadata` | GET | Full runtime metadata |
 | `/runtime/spec` | GET | Runtime spec version |
 | `/node/version` | GET | Node software version |
 | `/node/network` | GET | Network info (chain, peers) |
-
-### Sidecar Examples
-
-```bash
-# Get latest block
-curl "https://api-polkadot-sidecar.n.dwellir.com/${DWELLIR_API_KEY}/blocks/head"
-
-# Get account balance
-curl "https://api-polkadot-sidecar.n.dwellir.com/${DWELLIR_API_KEY}/accounts/1REAJ1k691g5Eqqg9gL7vvZCBG7FCCZ8zgQkZWd4va5ESih/balance-info"
-
-# Get block by number
-curl "https://api-polkadot-sidecar.n.dwellir.com/${DWELLIR_API_KEY}/blocks/12345678"
-
-# Get staking info
-curl "https://api-polkadot-sidecar.n.dwellir.com/${DWELLIR_API_KEY}/accounts/{accountId}/staking-info"
-
-# Get pallet storage
-curl "https://api-polkadot-sidecar.n.dwellir.com/${DWELLIR_API_KEY}/pallets/staking/storage/activeEra"
-
-# Get transaction material
-curl "https://api-polkadot-sidecar.n.dwellir.com/${DWELLIR_API_KEY}/transaction/material"
-```
 
 ### Sidecar Code Example
 

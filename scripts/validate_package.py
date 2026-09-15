@@ -4,11 +4,15 @@ import json
 import zipfile
 from pathlib import Path
 
+from package_scope import validate_scope
+
 root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument('--mcp-url', help='Expected staging URL override')
 args = parser.parse_args()
 package = root / 'dist' / 'dwellir'
+validate_scope(root / 'skills')
+validate_scope(package / 'skills')
 manifest_paths = [f'.{client}-plugin/plugin.json' for client in ('codex', 'claude', 'cursor')]
 for path in manifest_paths:
     manifest = json.loads((package / path).read_text())
@@ -28,13 +32,14 @@ assert mcp['url'].startswith('https://')
 marketplace = json.loads((package / '.claude-plugin/marketplace.json').read_text())
 assert marketplace['plugins'][0]['name'] == 'dwellir'
 assert marketplace['plugins'][0]['source'] == './'
-for skill in ('dwellir', 'evm', 'substrate', 'hyperliquid'):
+assert marketplace['plugins'][0]['description'] == json.loads((package / '.claude-plugin/plugin.json').read_text())['description'], 'Claude marketplace description differs from the plugin'
+for skill in ('dwellir', 'evm', 'substrate', 'hyperliquid-data'):
     path = package / 'skills' / skill / 'SKILL.md'
     assert path.read_text().startswith(f'---\nname: {skill}\n'), path
 for path in (root / 'skills').rglob('*'):
     if path.is_file():
         assert path.read_bytes() == (package / path.relative_to(root)).read_bytes(), path
-assert (package / 'skills/hyperliquid/LICENSE').is_file()
+assert (package / 'skills/hyperliquid-data/LICENSE').is_file()
 assert (package / 'assets/dwellir-logo.svg').is_file()
 with zipfile.ZipFile(root / 'dist/dwellir-plugin.zip') as archive:
     files = {p.relative_to(package).as_posix(): p.read_bytes() for p in package.rglob('*') if p.is_file()}

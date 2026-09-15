@@ -1,7 +1,7 @@
 {
   "name": "dwellir",
-  "version": "0.1.0",
-  "description": "Build blockchain projects with Dwellir RPC, account tools, and Hyperliquid references.",
+  "version": "0.2.0",
+  "description": "Query blockchain data, inspect Dwellir usage, manage API keys, and build read-only data applications.",
   "author": {
     "name": "Dwellir",
     "url": "https://www.dwellir.com",
@@ -24,7 +24,7 @@
   "interface": {
     "displayName": "Dwellir",
     "shortDescription": "Blockchain RPC and Hyperliquid developer tools",
-    "longDescription": "Connect your Dwellir account, inspect usage, manage API keys, query blockchain state, and configure projects through the Dwellir CLI. Includes Dwellir's Hyperliquid skill.",
+    "longDescription": "Connect your Dwellir account, inspect usage, manage API keys with approved access, query blockchain state, and build read-only data streams. Includes canonical Hyperliquid data guidance.",
     "developerName": "Dwellir",
     "category": "Developer Tools",
     "capabilities": [
@@ -33,7 +33,7 @@
     ],
     "websiteURL": "https://www.dwellir.com",
     "defaultPrompt": [
-      "Use Dwellir to set up an Ethereum project.",
+      "Use Dwellir to read the latest Ethereum block.",
       "Use Dwellir to inspect my blockchain RPC usage.",
       "Use Dwellir to build a Hyperliquid order book stream."
     ],
