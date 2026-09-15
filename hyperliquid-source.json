@@ -1,1 +1,5 @@
-{"repository":"https://github.com/dwellir-public/hyperliquid-skills.git","revision":"16911b51ab5d7690ea4ef374b286cabcd432c094"}
+{
+  "repository": "https://github.com/dwellir-public/hyperliquid-skills.git",
+  "revision": "a553692ed997c1e440627c8c68da71198e0a0e01",
+  "path": "skills/hyperliquid-data"
+}

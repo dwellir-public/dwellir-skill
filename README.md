@@ -1,122 +1,76 @@
-# Dwellir Blockchain Skills
+# Dwellir developer plugin
 
-For the hosted Dwellir plugin package, see [PLUGIN.md](PLUGIN.md).
+Connect Dwellir's hosted MCP server and load skills for blockchain data workflows.
+The same package supports Codex, Claude Code, and Cursor plugin manifests.
+Grok Bot uses Cursor's plugin infrastructure and needs a separate client check before submission.
 
-AI agent skills for blockchain development, powered by [Dwellir](https://www.dwellir.com).
+## What you can do
 
-## What are Skills?
+- Discover blockchain endpoints and query supported chain state.
+- Inspect account usage and manage API keys with dashboard-approved access.
+- Read Hyperliquid market data and sample WebSocket streams.
+- Build read-only EVM, Substrate, and Hyperliquid data applications.
 
-Skills are structured knowledge files that give AI coding agents (like Claude Code) deep context about specific tools, APIs, and infrastructure. Instead of searching docs or guessing at API patterns, agents load the relevant skill and get immediate access to endpoint formats, code examples, method references, and best practices.
+The package does not execute trades, transfer assets, sign transactions, or change billing.
+Key-management access applies to Dwellir API keys. It does not authorize blockchain writes.
+Queries and stream captures consume the connected Dwellir account's quota.
 
-**This skill enables agents to:**
-- Connect to 140+ blockchain networks via Dwellir RPC endpoints
-- Write correct code for EVM, Substrate/Polkadot, and non-EVM chains
-- Use trace/debug APIs for transaction analysis
-- Set up WebSocket subscriptions for real-time data
-- Build on Hyperliquid — gRPC streaming, order book data, Info API, trading patterns
-- Work with premium endpoints (Hyperliquid gRPC, Orderbook, Sidecar APIs)
-- Follow best practices for retry logic, caching, and connection management
+## Skills
 
-## Available Skills
+| Skill | Use |
+| --- | --- |
+| `dwellir` | Account connection, endpoint discovery, usage, permissions, and project configuration |
+| `evm` | EVM state, contract reads, transaction analysis, and subscriptions |
+| `substrate` | Polkadot and Substrate storage, blocks, events, and Sidecar queries |
+| `hyperliquid-data` | HyperEVM state, market snapshots, order books, and data streams |
 
-| Skill | Description |
-|-------|-------------|
-| **dwellir** | Hub skill — Dwellir platform overview, 140+ chains, endpoint format, pricing, API key setup, best practices, and dedicated nodes |
-| **evm** | EVM RPC reference — Ethereum JSON-RPC methods, ethers.js/viem/web3 setup, debug/trace APIs, WebSocket subscriptions, non-EVM chains (Aptos, Sui, TON, TRON, Starknet) |
-| **substrate** | Substrate/Polkadot reference — 30+ parachains, @polkadot/api setup, storage queries, subscriptions, Sidecar REST APIs |
-| **hyperliquid** | Hyperliquid L1 reference — HyperEVM, Info API proxy, gRPC streaming, order book WebSocket, trading patterns, dedicated nodes |
+`hyperliquid-data` comes unchanged from the pinned canonical Hyperliquid repository.
+The package excludes that repository's general trading skill and execution examples.
 
-Skills are loaded independently based on context. Mention "Ethereum" or "ethers.js" and the **evm** skill activates. Mention "Polkadot" or "parachain" and the **substrate** skill activates. Mention "Hyperliquid" or "order book" and the **hyperliquid** skill activates.
+## Connect
 
-## Installation
+Add this remote Streamable HTTP server in your client's MCP settings:
 
-```bash
-npx skills add dwellir-public/dwellir-skill
+```text
+https://mcp.dwellir.com/mcp
 ```
 
-## Usage
+Start the client's browser authorization flow.
+The Dwellir dashboard offers **Read only** or **Manage keys** within the client's requested scopes.
+No API key belongs in the MCP configuration.
 
-Once installed, skills activate automatically when you mention blockchain-related topics. Example prompts:
+See [client setup](https://www.dwellir.com/docs/agents/mcp) and [plugin installation](PLUGIN.md).
+A skills-only installation does not configure MCP or authorize an account.
 
-- "Get the ETH balance for this wallet using Dwellir"
-- "Set up a WebSocket subscription for new Ethereum blocks"
-- "Query the Polkadot staking info for this account"
-- "Trace this failed transaction to find the revert reason"
-- "Connect to Moonbeam and read a smart contract"
-- "What Substrate parachains does Dwellir support?"
-- "Set up a multi-chain provider for Ethereum, Polygon, and Arbitrum"
-- "Stream Hyperliquid order book data via WebSocket"
-- "Build a funding rate monitor for Hyperliquid perpetuals"
-- "Query Hyperliquid positions through the Info API"
+## Try it
 
-## Dwellir Integration
+- "Find the Ethereum mainnet endpoint and read the latest block number."
+- "Summarize my Dwellir RPC usage."
+- "Read this account's Polkadot balance."
+- "Sample the ETH order book on Hyperliquid."
+- "Build a read-only Hyperliquid market data stream."
 
-### RPC Endpoints (140+ chains)
+For application credentials, the `dwellir` skill checks CLI capabilities before using project setup.
+Project setup requires CLI 0.2.0 or later. It is unavailable until that version is released.
+Keep application secrets in private environment files or a secret store, outside chat and version control.
 
-High-performance JSON-RPC access to EVM chains, Substrate/Polkadot parachains, and non-EVM networks (Aptos, Sui, TON, TRON, Starknet, and more).
+## Data and support
 
-```
-https://api-{network}.n.dwellir.com/{API_KEY}
-wss://api-{network}.n.dwellir.com/{API_KEY}
-```
+MCP returns non-secret key references. Raw API keys stay on Dwellir servers.
+The server records tool usage, duration, outcomes, client metadata, and approximate sessions in PostHog.
+It excludes tool arguments, responses, credentials, and raw errors from those events.
+Revoke the connection from the dashboard's Agents page, then remove its local client configuration.
 
-### Trace & Debug APIs
+- [Documentation](https://www.dwellir.com/docs/agents)
+- [Privacy policy](https://www.dwellir.com/privacy-policy)
+- [Terms of service](https://www.dwellir.com/terms-of-service)
+- Public support: support@dwellir.com
 
-Full EVM execution tracing — `debug_traceTransaction`, `debug_traceCall`, `trace_block`, and more. Available on Developer plan and above.
+## Development
 
-### WebSocket Subscriptions
-
-Real-time data via WSS — new blocks, pending transactions, contract events, storage changes. Native support for both EVM and Substrate subscription patterns.
-
-### Premium Endpoints
-
-- **Hyperliquid gRPC** ($299/mo) — high-frequency trading data streaming
-- **Hyperliquid Orderbook** ($199/mo) — real-time L2 order book via WSS (100 levels depth, spot & HIP-3 support)
-- **Sidecar REST APIs** ($100/mo each) — Polkadot, Kusama, AssetHub, Centrifuge, KILT
-
-### Dedicated Nodes
-
-Single-tenant infrastructure for Ethereum, Base, BSC, Hyperliquid, Monad, EOS, Waves, and Acala. Starting at $248/month.
-
-## Skill Structure
-
-```
-dwellir-skill/
-├── .claude-plugin/
-│   └── marketplace.json              # Plugin manifest
-├── skills/
-│   ├── dwellir/
-│   │   └── SKILL.md                  # Hub skill — platform overview, pricing, setup
-│   ├── evm/
-│   │   └── SKILL.md                  # EVM chains — JSON-RPC, trace/debug, WebSocket
-│   ├── substrate/
-│   │   └── SKILL.md                  # Polkadot/Substrate — parachains, Sidecar REST
-│   └── hyperliquid/
-│       └── SKILL.md                  # Hyperliquid — Info API, gRPC, orderbook, trading
-├── README.md
-├── LICENSE.md
-└── .gitignore
-```
-
-## Getting Started with Dwellir
-
-1. **Sign up** at [dashboard.dwellir.com/register](https://dashboard.dwellir.com/register) (no credit card required)
-2. **Create an API key** in the dashboard
-3. **Set environment variable:**
-   ```bash
-   export DWELLIR_API_KEY="your-uuid-key"
-   export DWELLIR_RPC_URL="https://api-ethereum-mainnet.n.dwellir.com/${DWELLIR_API_KEY}"
-   ```
-4. **Start building** — the skills handle the rest
-
-## Contributing
-
-1. Fork this repository
-2. Create a feature branch
-3. Add or update skill content
-4. Test by loading the skill in Claude Code
-5. Submit a pull request
+See [PLUGIN.md](PLUGIN.md) for build, validation, release, and submission steps.
+Directory acceptance and publication require separate review.
 
 ## License
 
-MIT — see [LICENSE.md](LICENSE.md)
+MIT. See [LICENSE.md](LICENSE.md) and the bundled Hyperliquid license.

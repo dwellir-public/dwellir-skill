@@ -1,10 +1,9 @@
 ---
 name: evm
 description: >
-  EVM blockchain RPC reference for Dwellir endpoints — Ethereum JSON-RPC methods,
+  Use when reading EVM blockchain data through Dwellir endpoints: Ethereum JSON-RPC methods,
   connection setup (ethers.js, viem, web3.js, web3.py), debug/trace APIs,
-  WebSocket subscriptions, batch requests, non-EVM chain patterns
-  (Aptos, Sui, TON, TRON, Starknet), and best practices.
+  WebSocket subscriptions, and batch requests.
   Use when working with EVM chains, Ethereum, eth_ methods, Solidity contracts,
   gas estimation, transaction tracing, or EVM L2 rollups through Dwellir.
   Triggers on mentions of EVM, ethereum, eth_, solidity, ethers, viem, web3,
@@ -14,7 +13,13 @@ description: >
 
 # EVM RPC Endpoints Reference
 
-Complete reference for Dwellir's JSON-RPC endpoints covering EVM chains, debug/trace APIs, WebSocket subscriptions, batch requests, non-EVM chains, and best practices.
+Use Dwellir for blockchain reads, transaction analysis, and read-only application development.
+This skill does not sign or broadcast transactions, transfer assets, or execute trades.
+An existing wallet or a rejected MCP method does not authorize an alternate execution route.
+
+Discover endpoints with `list_endpoints` and supported MCP methods with `rpc_methods` before calling `rpc_call`.
+The direct RPC examples below describe application code; MCP supports a smaller method set.
+Read credentials from environment variables or a secret store. Never print authenticated URLs or raw connection errors.
 
 ## Overview
 
@@ -75,13 +80,22 @@ w3 = Web3(Web3.HTTPProvider(os.environ["DWELLIR_RPC_URL"]))
 print(w3.is_connected())
 ```
 
-### curl
+### Python HTTP request
 
-```bash
-curl -X POST ${DWELLIR_RPC_URL} \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
+```python
+import json
+import os
+from urllib.request import Request, urlopen
+
+payload = {"jsonrpc": "2.0", "method": "eth_blockNumber", "params": [], "id": 1}
+request = Request(os.environ["DWELLIR_RPC_URL"], data=json.dumps(payload).encode(),
+                  headers={"Content-Type": "application/json"})
+with urlopen(request, timeout=10) as response:
+    print(json.load(response).get("result"))
 ```
+
+Handle failures with a redacted error message. Raw exceptions can include the authenticated URL.
+The JSON examples below are request bodies for this HTTP pattern.
 
 ## EVM RPC Methods
 
@@ -109,7 +123,6 @@ curl -X POST ${DWELLIR_RPC_URL} \
 |--------|-------------|--------|
 | `eth_getTransactionByHash` | Get transaction by hash | `[txHash]` |
 | `eth_getTransactionReceipt` | Get transaction receipt | `[txHash]` |
-| `eth_sendRawTransaction` | Submit signed transaction | `[signedTxData]` |
 | `eth_getTransactionByBlockNumberAndIndex` | Get tx by block and index | `[blockNumber, index]` |
 
 ### Call & Simulation Methods
@@ -159,16 +172,14 @@ Subscription types: `newHeads`, `logs`, `newPendingTransactions`, `syncing`.
 
 ## Debug & Trace Methods
 
-Available on Developer plan and above.
+Availability depends on the endpoint and account entitlements. Check current documentation.
 
 ### debug_traceTransaction
 
 Trace a single transaction by hash. Returns detailed execution trace.
 
-```bash
-curl -X POST ${DWELLIR_RPC_URL} \
-  -H "Content-Type: application/json" \
-  -d '{
+```json
+{
     "jsonrpc": "2.0",
     "method": "debug_traceTransaction",
     "params": [
@@ -176,17 +187,15 @@ curl -X POST ${DWELLIR_RPC_URL} \
       {"tracer": "callTracer"}
     ],
     "id": 1
-  }'
+  }
 ```
 
 ### debug_traceCall
 
 Trace a call without submitting a transaction.
 
-```bash
-curl -X POST ${DWELLIR_RPC_URL} \
-  -H "Content-Type: application/json" \
-  -d '{
+```json
+{
     "jsonrpc": "2.0",
     "method": "debug_traceCall",
     "params": [
@@ -199,48 +208,42 @@ curl -X POST ${DWELLIR_RPC_URL} \
       {"tracer": "callTracer"}
     ],
     "id": 1
-  }'
+  }
 ```
 
 ### debug_traceBlockByNumber
 
 Trace all transactions in a block.
 
-```bash
-curl -X POST ${DWELLIR_RPC_URL} \
-  -H "Content-Type: application/json" \
-  -d '{
+```json
+{
     "jsonrpc": "2.0",
     "method": "debug_traceBlockByNumber",
     "params": ["0x...", {"tracer": "callTracer"}],
     "id": 1
-  }'
+  }
 ```
 
 ### trace_transaction (Parity-style)
 
-```bash
-curl -X POST ${DWELLIR_RPC_URL} \
-  -H "Content-Type: application/json" \
-  -d '{
+```json
+{
     "jsonrpc": "2.0",
     "method": "trace_transaction",
     "params": ["0x..."],
     "id": 1
-  }'
+  }
 ```
 
 ### trace_block (Parity-style)
 
-```bash
-curl -X POST ${DWELLIR_RPC_URL} \
-  -H "Content-Type: application/json" \
-  -d '{
+```json
+{
     "jsonrpc": "2.0",
     "method": "trace_block",
     "params": ["0x..."],
     "id": 1
-  }'
+  }
 ```
 
 ### Tracer Types
@@ -370,12 +373,12 @@ provider.on('block', async (blockNumber) => {
 ### WebSocket — Subscribe to Contract Events
 
 ```typescript
-import { WebSocketProvider, Contract, parseAbi } from 'ethers';
+import { WebSocketProvider, Contract } from 'ethers';
 
 const provider = new WebSocketProvider(process.env.DWELLIR_WSS_URL);
 const usdc = new Contract(
   '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-  parseAbi(['event Transfer(address indexed from, address indexed to, uint256 value)']),
+  ['event Transfer(address indexed from, address indexed to, uint256 value)'],
   provider
 );
 
@@ -388,14 +391,12 @@ usdc.on('Transfer', (from, to, value) => {
 
 Send multiple JSON-RPC calls in a single HTTP request:
 
-```bash
-curl -X POST ${DWELLIR_RPC_URL} \
-  -H "Content-Type: application/json" \
-  -d '[
+```json
+[
     {"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1},
     {"jsonrpc":"2.0","method":"eth_gasPrice","params":[],"id":2},
     {"jsonrpc":"2.0","method":"eth_chainId","params":[],"id":3}
-  ]'
+  ]
 ```
 
 ```typescript
@@ -444,69 +445,6 @@ const [blockNumber, gasPrice, chainId] = await Promise.all([
 {"jsonrpc":"2.0","method":"eth_unsubscribe","params":["0x...subscriptionId"],"id":1}
 ```
 
-## Non-EVM Chains
-
-### Aptos
-
-Aptos uses a REST API rather than JSON-RPC. Endpoint format is the same.
-
-```bash
-# Get ledger info
-curl ${DWELLIR_RPC_URL}/v1
-
-# Get account resources
-curl ${DWELLIR_RPC_URL}/v1/accounts/0x1/resources
-
-# Get account balance
-curl ${DWELLIR_RPC_URL}/v1/accounts/{address}/resource/0x1::coin::CoinStore%3C0x1::aptos_coin::AptosCoin%3E
-```
-
-### Sui
-
-Sui uses JSON-RPC 2.0.
-
-```bash
-# Get latest checkpoint
-curl -X POST ${DWELLIR_RPC_URL} \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","method":"sui_getLatestCheckpointSequenceNumber","params":[],"id":1}'
-
-# Get object
-curl -X POST ${DWELLIR_RPC_URL} \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","method":"sui_getObject","params":["0x..."],"id":1}'
-```
-
-### TON
-
-TON uses its own HTTP API.
-
-```bash
-# Get address info
-curl "${DWELLIR_RPC_URL}/getAddressInformation?address=EQ..."
-```
-
-### TRON
-
-TRON uses a REST-style HTTP API.
-
-```bash
-# Get account info
-curl -X POST ${DWELLIR_RPC_URL}/wallet/getaccount \
-  -H "Content-Type: application/json" \
-  -d '{"address": "T..."}'
-```
-
-### Starknet
-
-Starknet uses JSON-RPC 2.0 with `starknet_` prefixed methods.
-
-```bash
-curl -X POST ${DWELLIR_RPC_URL} \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","method":"starknet_blockNumber","params":[],"id":1}'
-```
-
 ## Best Practices
 
 1. **Retry with exponential backoff** — handle 429 (rate limited) and 5xx responses:
@@ -533,13 +471,13 @@ curl -X POST ${DWELLIR_RPC_URL} \
 
 6. **Connection pooling** — reuse HTTP connections and WebSocket clients rather than opening new ones per request.
 
-7. **Archive vs full nodes** — trace/debug methods and historical state queries require archive data, which Dwellir provides on paid plans.
+7. **Archive vs full nodes** — trace/debug methods and historical state queries require archive data, when the endpoint and account support it.
 
 ## Troubleshooting
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| `429 Too Many Requests` | Rate limit exceeded | Add backoff/retry or upgrade plan |
+| `429 Too Many Requests` | Rate limit exceeded | Add bounded backoff/retry and reduce request volume |
 | `401 Unauthorized` | Invalid API key | Check key is correct UUID in URL path |
 | `method not found` | Method unavailable on this chain | Verify chain supports this RPC method |
 | `missing trie node` | Historical state unavailable | Ensure trace/debug APIs are enabled on your plan |
