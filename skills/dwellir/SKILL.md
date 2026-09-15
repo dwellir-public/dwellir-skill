@@ -40,8 +40,9 @@ This package does not execute trades, transfer assets, sign transactions, or aut
 ## Configure a project
 
 Check `dwellir --version` and `dwellir project setup --help` first.
-Project setup requires CLI 0.2.0 or later and successful command-help output.
-If the command is unavailable, check released versions at https://github.com/dwellir-public/cli/releases.
+Project setup requires a published CLI release of 0.2.0 or later and successful command-help output.
+Verify the installed version exists at https://github.com/dwellir-public/cli/releases, even when local help succeeds.
+An unreleased local build does not satisfy this requirement.
 If no released version provides it, stop setup and report the limitation. Do not install an unreleased branch.
 Use an existing application secret store only when the user already configured credentials there.
 Do not invent installation commands or package names.

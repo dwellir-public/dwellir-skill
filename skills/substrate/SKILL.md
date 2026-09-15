@@ -73,9 +73,10 @@ use subxt::{OnlineClient, PolkadotConfig};
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let api_key = std::env::var("DWELLIR_API_KEY")?;
     let url = format!("wss://api-polkadot.n.dwellir.com/{}", api_key);
-    let api = OnlineClient::<PolkadotConfig>::from_url(&url).await?;
+    let api = OnlineClient::<PolkadotConfig>::from_url(&url)
+        .await.map_err(|_| "Dwellir connection failed")?;
 
-    let block = api.blocks().at_latest().await?;
+    let block = api.blocks().at_latest().await.map_err(|_| "Dwellir block query failed")?;
     println!("Latest block: #{}", block.number());
     Ok(())
 }
