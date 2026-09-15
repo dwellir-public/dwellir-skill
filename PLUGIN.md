@@ -15,6 +15,7 @@ claude plugin validate .claude-plugin/marketplace.json --strict
 
 The output is `dist/dwellir-plugin.zip` and the expanded `dist/dwellir` directory.
 For staging, pass `--mcp-url https://mcp.dwellir.tech:9999/mcp` to the build command.
+Pass the same override to `scripts/validate_package.py` when verifying that staging artifact.
 The root Git package and archive use the same skills and client manifests.
 The staging override changes only the archive's MCP URL.
 

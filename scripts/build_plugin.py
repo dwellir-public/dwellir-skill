@@ -9,7 +9,7 @@ from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
-parser.add_argument("--mcp-url", default="https://mcp.dwellir.com/mcp")
+parser.add_argument("--mcp-url", help="Override the shared MCP URL for staging")
 parser.add_argument("--sync-hyperliquid", action="store_true", help="Update the vendored skill from the pinned source")
 args = parser.parse_args()
 source = json.loads((root / "hyperliquid-source.json").read_text())
@@ -41,7 +41,10 @@ with tempfile.TemporaryDirectory() as temporary:
     if canonical_files != vendored_files:
         raise ValueError("Vendored Hyperliquid differs from its pin; run with --sync-hyperliquid")
 shutil.copytree(root / "skills", output / "skills")
-(output / ".mcp.json").write_text(json.dumps({"mcpServers": {"dwellir": {"type": "http", "url": args.mcp_url}}}, indent=2) + "\n")
+mcp = json.loads((root / ".mcp.json").read_text())
+if args.mcp_url:
+    mcp["mcpServers"]["dwellir"]["url"] = args.mcp_url
+(output / ".mcp.json").write_text(json.dumps(mcp, indent=2) + "\n")
 shutil.copyfile(root / "hyperliquid-source.json", output / "hyperliquid-source.json")
 shutil.copyfile(root / "LICENSE.md", output / "LICENSE.md")
 for name in ("README.md", "PLUGIN.md"):

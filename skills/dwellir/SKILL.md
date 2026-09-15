@@ -12,6 +12,11 @@ For detailed EVM or Substrate references, load `evm` or `substrate` when availab
 
 ## Connect and query
 
+Check whether the following MCP tools are available before calling them.
+Skills-only installation does not configure the MCP connection.
+If needed, connect `https://mcp.dwellir.com/mcp` through the client's MCP settings and complete browser authorization.
+For account or endpoint tasks without MCP, inspect `dwellir --help` and the relevant command's help before using the CLI.
+
 Connect the Dwellir MCP server through the client's account connection flow.
 The browser shows the requesting application and access level.
 Users can create a Dwellir account during browser login.

@@ -1,9 +1,13 @@
 """Check that Git installations and the release archive contain the same plugin."""
+import argparse
 import json
 import zipfile
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
+parser = argparse.ArgumentParser()
+parser.add_argument('--mcp-url', help='Expected staging URL override')
+args = parser.parse_args()
 package = root / 'dist' / 'dwellir'
 manifest_paths = [f'.{client}-plugin/plugin.json' for client in ('codex', 'claude', 'cursor')]
 for path in manifest_paths:
@@ -13,7 +17,12 @@ for path in manifest_paths:
     assert (root / path).read_bytes() == (package / path).read_bytes(), path
     assert (package / manifest.get('mcpServers', '.mcp.json')).is_file(), path
 
-mcp = json.loads((package / '.mcp.json').read_text())['mcpServers']['dwellir']
+expected_mcp = json.loads((root / '.mcp.json').read_text())
+if args.mcp_url:
+    expected_mcp['mcpServers']['dwellir']['url'] = args.mcp_url
+packaged_mcp = json.loads((package / '.mcp.json').read_text())
+assert packaged_mcp == expected_mcp, 'Packaged MCP configuration differs from its source'
+mcp = packaged_mcp['mcpServers']['dwellir']
 assert mcp['type'] == 'http'
 assert mcp['url'].startswith('https://')
 marketplace = json.loads((package / '.claude-plugin/marketplace.json').read_text())
