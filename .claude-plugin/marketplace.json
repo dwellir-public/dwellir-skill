@@ -8,7 +8,7 @@
     {
       "name": "dwellir",
       "source": "./",
-      "description": "Build blockchain projects with Dwellir RPC, account tools, and Hyperliquid references."
+      "description": "Query blockchain data, inspect Dwellir usage, manage API keys, and build read-only data applications."
     }
   ],
   "metadata": {

@@ -32,6 +32,7 @@ assert mcp['url'].startswith('https://')
 marketplace = json.loads((package / '.claude-plugin/marketplace.json').read_text())
 assert marketplace['plugins'][0]['name'] == 'dwellir'
 assert marketplace['plugins'][0]['source'] == './'
+assert marketplace['plugins'][0]['description'] == json.loads((package / '.claude-plugin/plugin.json').read_text())['description'], 'Claude marketplace description differs from the plugin'
 for skill in ('dwellir', 'evm', 'substrate', 'hyperliquid-data'):
     path = package / 'skills' / skill / 'SKILL.md'
     assert path.read_text().startswith(f'---\nname: {skill}\n'), path

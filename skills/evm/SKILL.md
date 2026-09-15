@@ -88,15 +88,17 @@ import os
 from urllib.request import Request, urlopen
 
 payload = {"jsonrpc": "2.0", "method": "eth_blockNumber", "params": [], "id": 1}
-request = Request(os.environ["DWELLIR_RPC_URL"], data=json.dumps(payload).encode(),
-                  headers={"Content-Type": "application/json"})
 try:
+    request = Request(os.environ["DWELLIR_RPC_URL"], data=json.dumps(payload).encode(),
+                      headers={"Content-Type": "application/json"})
     with urlopen(request, timeout=10) as response:
         decoded = json.load(response)
 except Exception:
     raise SystemExit("Dwellir request failed. Check endpoint access and retry.") from None
 responses = decoded if isinstance(decoded, list) else [decoded]
 for item in responses:
+    if "error" in item:
+        raise SystemExit(f"Dwellir RPC request {item.get('id')} failed.")
     print(item.get("id"), item.get("result"))
 ```
 

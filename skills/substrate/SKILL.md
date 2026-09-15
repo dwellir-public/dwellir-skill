@@ -393,8 +393,7 @@ https://api-{chain}-sidecar.n.dwellir.com/{API_KEY}
 | `/pallets/{palletId}/storage/{storageItemId}` | GET | Specific storage value |
 | `/pallets/{palletId}/errors` | GET | Pallet error definitions |
 | `/pallets/{palletId}/constants` | GET | Pallet constants |
-| `/transaction/material` | GET | Chain metadata for offline tx construction |
-| `/transaction/fee-estimate` | POST | Estimate fee for a transaction |
+| `/transaction/fee-estimate` | POST | Estimate fee without submitting a transaction |
 | `/runtime/metadata` | GET | Full runtime metadata |
 | `/runtime/spec` | GET | Runtime spec version |
 | `/node/version` | GET | Node software version |
