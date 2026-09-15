@@ -4,20 +4,22 @@ import json
 import shutil
 import subprocess
 import tempfile
+import zipfile
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument("--mcp-url", default="https://mcp.dwellir.com/mcp")
+parser.add_argument("--sync-hyperliquid", action="store_true", help="Update the vendored skill from the pinned source")
 args = parser.parse_args()
 source = json.loads((root / "hyperliquid-source.json").read_text())
 output = root / "dist" / "dwellir"
 if output.exists():
     shutil.rmtree(output)
 output.mkdir(parents=True)
-shutil.copytree(root / ".codex-plugin", output / ".codex-plugin")
+for directory in (".codex-plugin", ".claude-plugin", ".cursor-plugin"):
+    shutil.copytree(root / directory, output / directory)
 shutil.copytree(root / "assets", output / "assets")
-shutil.copytree(root / "skills", output / "skills", ignore=shutil.ignore_patterns("hyperliquid"))
 with tempfile.TemporaryDirectory() as temporary:
     checkout = Path(temporary) / "hyperliquid"
     subprocess.run(["git", "clone", "--quiet", "--no-checkout", source["repository"], str(checkout)], check=True)
@@ -25,13 +27,30 @@ with tempfile.TemporaryDirectory() as temporary:
     actual = subprocess.check_output(["git", "-C", str(checkout), "rev-parse", "HEAD"], text=True).strip()
     if actual != source["revision"]:
         raise ValueError("Hyperliquid source revision mismatch")
-    destination = output / "skills" / "hyperliquid"
+    destination = Path(temporary) / "canonical"
     destination.mkdir()
     for name in ("SKILL.md", "LICENSE"):
         shutil.copyfile(checkout / name, destination / name)
     shutil.copytree(checkout / "references", destination / "references")
-(output / ".mcp.json").write_text(json.dumps({"mcpServers": {"dwellir": {"url": args.mcp_url}}}, indent=2) + "\n")
+    vendored = root / "skills" / "hyperliquid"
+    if args.sync_hyperliquid:
+        shutil.rmtree(vendored)
+        shutil.copytree(destination, vendored)
+    canonical_files = {p.relative_to(destination): p.read_bytes() for p in destination.rglob("*") if p.is_file()}
+    vendored_files = {p.relative_to(vendored): p.read_bytes() for p in vendored.rglob("*") if p.is_file()}
+    if canonical_files != vendored_files:
+        raise ValueError("Vendored Hyperliquid differs from its pin; run with --sync-hyperliquid")
+shutil.copytree(root / "skills", output / "skills")
+(output / ".mcp.json").write_text(json.dumps({"mcpServers": {"dwellir": {"type": "http", "url": args.mcp_url}}}, indent=2) + "\n")
 shutil.copyfile(root / "hyperliquid-source.json", output / "hyperliquid-source.json")
 shutil.copyfile(root / "LICENSE.md", output / "LICENSE.md")
-shutil.make_archive(str(root / "dist" / "dwellir-plugin"), "zip", output)
+for name in ("README.md", "PLUGIN.md"):
+    shutil.copyfile(root / name, output / name)
+with zipfile.ZipFile(root / "dist" / "dwellir-plugin.zip", "w") as archive:
+    for path in sorted(output.rglob("*")):
+        if path.is_file():
+            entry = zipfile.ZipInfo(path.relative_to(output).as_posix())
+            entry.compress_type = zipfile.ZIP_DEFLATED
+            entry.external_attr = 0o100644 << 16
+            archive.writestr(entry, path.read_bytes())
 print(output)

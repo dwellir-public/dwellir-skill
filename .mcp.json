@@ -1,1 +1,8 @@
-{"mcpServers": {"dwellir": {"url": "https://mcp.dwellir.com/mcp"}}}
+{
+  "mcpServers": {
+    "dwellir": {
+      "type": "http",
+      "url": "https://mcp.dwellir.com/mcp"
+    }
+  }
+}
