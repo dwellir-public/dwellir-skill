@@ -1,0 +1,23 @@
+{
+  "name": "dwellir",
+  "version": "0.1.0",
+  "description": "Build blockchain projects with Dwellir RPC, account tools, and Hyperliquid references.",
+  "author": {
+    "name": "Dwellir",
+    "url": "https://www.dwellir.com",
+    "email": "support@dwellir.com"
+  },
+  "homepage": "https://www.dwellir.com",
+  "repository": "https://github.com/dwellir-public/dwellir-skill",
+  "keywords": [
+    "blockchain",
+    "rpc",
+    "hyperliquid",
+    "hyperevm",
+    "ethereum",
+    "substrate",
+    "polkadot",
+    "solana"
+  ],
+  "license": "MIT"
+}

@@ -2,25 +2,16 @@
   "name": "dwellir-skill",
   "owner": {
     "name": "Dwellir",
-    "url": "https://www.dwellir.com"
-  },
-  "metadata": {
-    "description": "Blockchain RPC skills for Claude Code — 140+ chains, Polkadot ecosystem, EVM networks, Hyperliquid, and more",
-    "version": "2.0.0",
-    "repository": "https://github.com/dwellir-public/dwellir-skill"
+    "email": "support@dwellir.com"
   },
   "plugins": [
     {
-      "name": "dwellir-skill",
-      "description": "Blockchain RPC skills for developers and AI agents: Dwellir infrastructure, 140+ chain endpoints, Polkadot/Substrate ecosystem, EVM networks, Hyperliquid trading infrastructure, trace/debug APIs, WebSocket subscriptions, and premium endpoints",
+      "name": "dwellir",
       "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/dwellir",
-        "./skills/evm",
-        "./skills/substrate",
-        "./skills/hyperliquid"
-      ]
+      "description": "Build blockchain projects with Dwellir RPC, account tools, and Hyperliquid references."
     }
-  ]
+  ],
+  "metadata": {
+    "description": "Dwellir blockchain RPC developer skills and hosted MCP connection"
+  }
 }
