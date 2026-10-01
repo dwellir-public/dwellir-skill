@@ -29,6 +29,28 @@ assert packaged_mcp == expected_mcp, 'Packaged MCP configuration differs from it
 mcp = packaged_mcp['mcpServers']['dwellir']
 assert mcp['type'] == 'http'
 assert mcp['url'].startswith('https://')
+portable = json.loads((package / 'plugin.json').read_text())
+assert (root / 'plugin.json').read_bytes() == (package / 'plugin.json').read_bytes()
+assert portable['name'] == manifest['name'] and portable['version'] == manifest['version']
+portable_mcp = json.loads((package / 'mcp.json').read_text())
+assert portable_mcp == {'$schema': 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json',
+                        'mcpServers': {'dwellir': {'type': 'streamable-http', 'url': mcp['url']}}}
+assert portable.get('apps') is None
+assert portable.get('extensions', {}).get('com.openai', {}).get('apps') is None
+openai = portable['extensions']['com.openai']
+codex = json.loads((package / manifest_paths[0]).read_text())
+assert codex['interface'] == openai['interface']
+assert codex['extensions']['com.openai'] == {k: v for k, v in openai.items() if k != 'interface'}
+for field, maximum in [('displayName', 30), ('shortDescription', 30), ('longDescription', 4000)]:
+    assert 0 < len(openai['interface'][field]) <= maximum, field
+for field in ('websiteURL', 'supportURL', 'privacyPolicyURL', 'termsOfServiceURL'):
+    assert openai['interface'][field].startswith('https://'), field
+for field in ('logo', 'composerIcon'):
+    icon = package / openai['interface'][field]
+    assert icon.is_file(), field
+cases = openai['review']['test_cases']
+assert len(cases['positive']) == 5 and len(cases['negative']) == 3
+assert not ({'test_credentials', 'reviewer_instructions'} & set(openai['review']))
 marketplace = json.loads((package / '.claude-plugin/marketplace.json').read_text())
 assert marketplace['plugins'][0]['name'] == 'dwellir'
 assert marketplace['plugins'][0]['source'] == './'

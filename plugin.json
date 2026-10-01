@@ -1,6 +1,5 @@
 {
   "name": "dwellir",
-  "version": "0.2.1",
   "description": "Query blockchain data, inspect Dwellir usage, manage API keys, and build read-only data applications.",
   "author": {
     "name": "Dwellir AB",
@@ -19,32 +18,33 @@
     "polkadot",
     "solana"
   ],
-  "skills": "./skills/",
-  "mcpServers": "./.mcp.json",
-  "interface": {
-    "displayName": "Dwellir",
-    "shortDescription": "Blockchain RPC tools",
-    "longDescription": "Connect your Dwellir account to discover blockchain endpoints, inspect RPC usage, and query blockchain data. Read Hyperliquid Info and capture bounded WebSocket samples. Choose read-only access or allow API key management during account approval. API keys remain on Dwellir servers; tools return non-secret references. Blockchain queries consume your Dwellir account quota. Includes developer guidance for EVM, Substrate, and Hyperliquid data applications. The plugin does not execute trades, transfer assets, sign wallet transactions, or change subscriptions. Independent application setup uses the Dwellir CLI in a coding environment.",
-    "developerName": "Dwellir AB",
-    "category": "Developer Tools",
-    "capabilities": [
-      "Read",
-      "Write"
-    ],
-    "websiteURL": "https://www.dwellir.com/docs/agents/plugin",
-    "defaultPrompt": [
-      "Use Dwellir to read the latest Ethereum block.",
-      "Use Dwellir to inspect my blockchain RPC usage.",
-      "Use Dwellir to build a Hyperliquid order book stream."
-    ],
-    "privacyPolicyURL": "https://www.dwellir.com/privacy-policy",
-    "termsOfServiceURL": "https://www.dwellir.com/terms-of-service",
-    "logo": "./assets/dwellir-icon.png",
-    "supportURL": "https://www.dwellir.com/contact",
-    "composerIcon": "./assets/dwellir-icon.png"
-  },
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "version": "0.2.1",
+  "license": "MIT",
   "extensions": {
     "com.openai": {
+      "interface": {
+        "displayName": "Dwellir",
+        "shortDescription": "Blockchain RPC tools",
+        "longDescription": "Connect your Dwellir account to discover blockchain endpoints, inspect RPC usage, and query blockchain data. Read Hyperliquid Info and capture bounded WebSocket samples. Choose read-only access or allow API key management during account approval. API keys remain on Dwellir servers; tools return non-secret references. Blockchain queries consume your Dwellir account quota. Includes developer guidance for EVM, Substrate, and Hyperliquid data applications. The plugin does not execute trades, transfer assets, sign wallet transactions, or change subscriptions. Independent application setup uses the Dwellir CLI in a coding environment.",
+        "developerName": "Dwellir AB",
+        "category": "Developer Tools",
+        "capabilities": [
+          "Read",
+          "Write"
+        ],
+        "websiteURL": "https://www.dwellir.com/docs/agents/plugin",
+        "defaultPrompt": [
+          "Use Dwellir to read the latest Ethereum block.",
+          "Use Dwellir to inspect my blockchain RPC usage.",
+          "Use Dwellir to build a Hyperliquid order book stream."
+        ],
+        "privacyPolicyURL": "https://www.dwellir.com/privacy-policy",
+        "termsOfServiceURL": "https://www.dwellir.com/terms-of-service",
+        "logo": "./assets/dwellir-icon.png",
+        "supportURL": "https://www.dwellir.com/contact",
+        "composerIcon": "./assets/dwellir-icon.png"
+      },
       "onboardingSkill": "./skills/dwellir/SKILL.md",
       "review": {
         "test_cases": {
