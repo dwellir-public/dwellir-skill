@@ -2,7 +2,6 @@
 
 Connect Dwellir's hosted MCP server and load skills for blockchain data workflows.
 The package includes portable OpenAI manifests and Codex, Claude Code, and Cursor compatibility manifests.
-Grok Bot uses Cursor's plugin infrastructure and needs a separate client check before submission.
 
 ## What you can do
 
@@ -62,7 +61,7 @@ Use `analytics_preferences` to inspect the setting or disable it with `enabled: 
 Explicit opt-in expires after 30 days. A new connection starts with analytics off.
 The control tool is never captured. Opt-out does not delete existing events.
 
-When enabled, PostHog receives tool names, timings, outcomes, normalized client labels, and hashed connection and session identifiers.
+When enabled, PostHog receives tool names, timings, outcomes, normalized client labels, and hashed connection identifiers and random session identifiers.
 Inferred intent uses selected RPC methods, Info query types, stream subscriptions, usage intervals, and public documentation paths.
 Complete arguments, responses, credentials, and raw errors are excluded.
 Revoke the connection from the dashboard's Agents page, then remove its local client configuration.
@@ -76,7 +75,7 @@ Revoke the connection from the dashboard's Agents page, then remove its local cl
 
 See [PLUGIN.md](https://github.com/dwellir-public/dwellir-skill/blob/main/PLUGIN.md) in the source repository for build, validation, release, and submission steps.
 The public upload excludes that development guide and private reviewer credentials.
-Version 0.2.1 includes five positive and three negative review cases, unrestricted country availability, and no commerce declaration.
+Version 0.2.1 includes five positive and three negative review cases, unrestricted country availability, and a declaration that commerce is absent.
 A verified demo URL and published privacy coverage remain required before OpenAI submission.
 Directory acceptance and publication require separate review.
 

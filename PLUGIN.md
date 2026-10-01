@@ -51,11 +51,10 @@ OpenAI imports portable `plugin.json` and `mcp.json`.
 The package does not modify an existing standalone Dwellir MCP connection.
 Use one Dwellir connection per client to avoid duplicate tools.
 
-### Cursor and Grok Bot
+### Cursor
 
 Cursor reads `.cursor-plugin/plugin.json`, `skills/`, and the declared `.mcp.json`.
 Test local installation and account connection in Cursor before submitting the public repository.
-Test Grok Bot separately; marketplace submission alone does not prove availability in Grok Bot.
 See the [Cursor plugin reference](https://cursor.com/docs/reference/plugins).
 
 ## Package scope
