@@ -1,8 +1,7 @@
 # Dwellir developer plugin
 
 Connect Dwellir's hosted MCP server and load skills for blockchain data workflows.
-The same package supports Codex, Claude Code, and Cursor plugin manifests.
-Grok Bot uses Cursor's plugin infrastructure and needs a separate client check before submission.
+The package includes portable OpenAI manifests and Codex, Claude Code, and Cursor compatibility manifests.
 
 ## What you can do
 
@@ -39,7 +38,7 @@ Start the client's browser authorization flow.
 The Dwellir dashboard offers **Read only** or **Manage keys** within the client's requested scopes.
 No API key belongs in the MCP configuration.
 
-See [client setup](https://www.dwellir.com/docs/agents/mcp) and [plugin installation](PLUGIN.md).
+See [client setup](https://www.dwellir.com/docs/agents/mcp) and [plugin installation](https://github.com/dwellir-public/dwellir-skill/blob/main/PLUGIN.md).
 A skills-only installation does not configure MCP or authorize an account.
 
 ## Try it
@@ -51,14 +50,20 @@ A skills-only installation does not configure MCP or authorize an account.
 - "Build a read-only Hyperliquid market data stream."
 
 For application credentials, the `dwellir` skill checks CLI capabilities before using project setup.
-Project setup requires CLI 0.2.0 or later. It is unavailable until that version is released.
+Project setup requires released CLI 0.2.0 or later.
 Keep application secrets in private environment files or a secret store, outside chat and version control.
 
 ## Data and support
 
 MCP returns non-secret key references. Raw API keys stay on Dwellir servers.
-The server records tool usage, duration, outcomes, client metadata, and approximate sessions in PostHog.
-It excludes tool arguments, responses, credentials, and raw errors from those events.
+Optional MCP analytics is off until you opt in for your connection.
+Use `analytics_preferences` to inspect the setting or disable it with `enabled: false`.
+Explicit opt-in expires after 30 days. A new connection starts with analytics off.
+The control tool is never captured. Opt-out does not delete existing events.
+
+When enabled, PostHog receives tool names, timings, outcomes, normalized client labels, and hashed connection identifiers and random session identifiers.
+Inferred intent uses selected RPC methods, Info query types, stream subscriptions, usage intervals, and public documentation paths.
+Complete arguments, responses, credentials, and raw errors are excluded.
 Revoke the connection from the dashboard's Agents page, then remove its local client configuration.
 
 - [Documentation](https://www.dwellir.com/docs/agents)
@@ -68,7 +73,10 @@ Revoke the connection from the dashboard's Agents page, then remove its local cl
 
 ## Development
 
-See [PLUGIN.md](PLUGIN.md) for build, validation, release, and submission steps.
+See [PLUGIN.md](https://github.com/dwellir-public/dwellir-skill/blob/main/PLUGIN.md) in the source repository for build, validation, release, and submission steps.
+The public upload excludes that development guide and private reviewer credentials.
+Version 0.2.1 includes five positive and three negative review cases, unrestricted country availability, and a declaration that commerce is absent.
+A verified demo URL and published privacy coverage remain required before OpenAI submission.
 Directory acceptance and publication require separate review.
 
 ## License

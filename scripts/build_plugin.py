@@ -48,7 +48,11 @@ if args.mcp_url:
 (output / ".mcp.json").write_text(json.dumps(mcp, indent=2) + "\n")
 shutil.copyfile(root / "hyperliquid-source.json", output / "hyperliquid-source.json")
 shutil.copyfile(root / "LICENSE.md", output / "LICENSE.md")
-for name in ("README.md", "PLUGIN.md"):
+portable_mcp = json.loads((root / "mcp.json").read_text())
+if args.mcp_url:
+    portable_mcp["mcpServers"]["dwellir"]["url"] = args.mcp_url
+(output / "mcp.json").write_text(json.dumps(portable_mcp, indent=2) + "\n")
+for name in ("plugin.json", "README.md"):
     shutil.copyfile(root / name, output / name)
 with zipfile.ZipFile(root / "dist" / "dwellir-plugin.zip", "w") as archive:
     for path in sorted(output.rglob("*")):
