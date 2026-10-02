@@ -75,8 +75,9 @@ Revoke the connection from the dashboard's Agents page, then remove its local cl
 
 See [PLUGIN.md](https://github.com/dwellir-public/dwellir-skill/blob/main/PLUGIN.md) in the source repository for build, validation, release, and submission steps.
 The public upload excludes that development guide and private reviewer credentials.
-Version 0.2.1 includes five positive and three negative review cases, unrestricted country availability, and a declaration that commerce is absent.
-A verified demo URL and published privacy coverage remain required before OpenAI submission.
+Version 0.2.2 includes the verified Codex walkthrough URL.
+The package retains five positive and three negative review cases, unrestricted country availability, and a declaration that commerce is absent.
+Published privacy coverage and portal checks remain required before OpenAI submission.
 Directory acceptance and publication require separate review.
 
 ## License

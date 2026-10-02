@@ -19,7 +19,7 @@
     "solana"
   ],
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "license": "MIT",
   "extensions": {
     "com.openai": {
@@ -96,10 +96,11 @@
           ]
         },
         "commerce": false,
-        "commerce_description": "The plugin does not offer purchases, process payments, or change subscriptions. It reads blockchain data and account usage and manages API key references with approved access. Queries consume the connected Dwellir account's existing quota."
+        "commerce_description": "The plugin does not offer purchases, process payments, or change subscriptions. It reads blockchain data and account usage and manages API key references with approved access. Queries consume the connected Dwellir account's existing quota.",
+        "demo_recording_url": "https://youtu.be/St0CW8qQTxo"
       },
       "publication": {
-        "release_notes": "Prepare the Dwellir data plugin for OpenAI review. Add a portable manifest, review cases, support link, and square PNG icons. Preserve the four skills and production MCP endpoint from version 0.2.0.",
+        "release_notes": "Add the verified Codex walkthrough URL to OpenAI review metadata. The four skills and production MCP configuration remain unchanged.",
         "countries": []
       }
     }
