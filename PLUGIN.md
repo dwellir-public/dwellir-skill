@@ -88,7 +88,8 @@ Verify whether a single contact field is public before choosing its address.
 
 OpenAI accepts MCP and skills together. The package embeds five positive and three negative test cases.
 These cases cover the 14-tool inventory. Run them against the saved submission with the dedicated reviewer account.
-Add a verified walkthrough URL to `extensions.com.openai.review.demo_recording_url` before rebuilding.
+The verified walkthrough URL is included in `extensions.com.openai.review.demo_recording_url`.
+Update that field when the recorded functionality changes.
 Keep credentials and sign-in instructions in OpenAI's secure reviewer fields.
 Do not claim submission readiness from a valid ZIP. Published privacy coverage and portal checks remain required.
 See [OpenAI submission requirements](https://developers.openai.com/plugins/deploy/submission).
