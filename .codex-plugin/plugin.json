@@ -52,8 +52,8 @@
             {
               "description": "Discover and query Ethereum. Setup: connect the dedicated reviewer account with an enabled key and Ethereum quota.",
               "prompt": "Find an Ethereum mainnet endpoint and tell me its chain ID and latest block number. Then watch briefly for a new block and show its number.",
-              "tools_triggered": "list_endpoints, list_keys, rpc_methods, rpc_call, capture_stream",
-              "expected_behavior": "Filter endpoints for Ethereum mainnet. Select an enabled key reference. Check supported methods, then call eth_chainId and eth_blockNumber with empty params. The returned chain ID must be 0x1. Convert the returned hexadecimal block number correctly. Capture newHeads on the discovered Ethereum WebSocket endpoint with seconds 15 and messages 2. Show a block number from an actual eth_subscription event. A subscription acknowledgement alone does not prove a block arrived. If no block arrives, explain the timeout; record the stream check as incomplete and rerun before submission. Do not disclose credentials or invent a fixed block height."
+              "tools_triggered": "list_endpoints, list_keys, eth_chainId, eth_blockNumber, capture_evm_new_heads",
+              "expected_behavior": "Filter endpoints for Ethereum mainnet. Select an enabled key reference. Call eth_chainId and eth_blockNumber as separate tools with endpoint_id and key_ref. Do not supply method or params fields. The returned chain ID must be 0x1. Convert the returned hexadecimal block number correctly. Call capture_evm_new_heads on the discovered Ethereum WebSocket endpoint with seconds 15 and messages 2. Show a block number from an actual eth_subscription event. A subscription acknowledgement alone does not prove a block arrived. If no block arrives, explain the timeout; record the stream check as incomplete and rerun before submission. Do not disclose credentials or invent a fixed block height."
             },
             {
               "description": "Inspect account usage. Setup: generate successful blockchain reads with the dedicated reviewer account. Wait until usage reporting includes them. No historical backfill is required. Optional server analytics starts off; this case inspects and disables its setting.",
@@ -70,8 +70,8 @@
             {
               "description": "Read Hyperliquid metadata. Setup: the dedicated reviewer account has an enabled key and Hyperliquid Info access.",
               "prompt": "Show five perpetual markets available through Dwellir's Hyperliquid Info service.",
-              "tools_triggered": "list_endpoints, list_keys, hyperliquid_info",
-              "expected_behavior": "Select the discovered Hyperliquid HyperCore Info endpoint and an enabled key reference. Call hyperliquid_info with query_type meta. Name five markets present in the returned universe. Explain an entitlement failure without fabricating markets or silently changing providers."
+              "tools_triggered": "list_endpoints, list_keys, hyperliquid_meta",
+              "expected_behavior": "Select the discovered Hyperliquid HyperCore Info endpoint and an enabled key reference. Call hyperliquid_meta with endpoint_id and key_ref. Do not supply query_type. Name five markets present in the returned universe. Explain an entitlement failure without fabricating markets or silently changing providers."
             },
             {
               "description": "Manage a disposable key. Setup: dedicated reviewer account with Manage keys access. No existing key may have the name openai-review-disposable. Existing application keys must remain untouched.",
@@ -100,7 +100,7 @@
         "demo_recording_url": "https://youtu.be/St0CW8qQTxo"
       },
       "publication": {
-        "release_notes": "Add the verified Codex walkthrough URL to OpenAI review metadata. The four skills and production MCP configuration remain unchanged.",
+        "release_notes": "Replace generic blockchain executors with separately exposed RPC, Hyperliquid Info, and stream tools. Update skills and review cases for named inputs.",
         "countries": []
       }
     }

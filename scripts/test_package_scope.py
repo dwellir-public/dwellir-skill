@@ -16,10 +16,18 @@ class PackageScopeTest(unittest.TestCase):
 
     def test_reads_and_api_key_management_remain_supported(self):
         (self.skills / 'dwellir/SKILL.md').write_text(
-            'Use rpc_call for eth_getBalance, create_key with approved access, '
-            'and capture_stream for order book updates.'
+            'Use eth_getBalance, create_key with approved access, '
+            'and capture_hyperliquid_l2_book for order book updates.'
         )
         validate_scope(self.skills)
+
+    def test_rejects_removed_generic_tools(self):
+        skill = self.skills / 'dwellir/SKILL.md'
+        for tool in ['rpc_methods', 'rpc_call', 'hyperliquid_info', 'capture_stream']:
+            with self.subTest(tool=tool):
+                skill.write_text(f'Use `{tool}` to query data.\n')
+                with self.assertRaisesRegex(ValueError, 'Removed generic MCP tool'):
+                    validate_scope(self.skills)
 
     def test_rejects_execution_examples_in_nested_references(self):
         reference = self.skills / 'hyperliquid-data/references/example.md'

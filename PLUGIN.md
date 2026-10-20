@@ -104,3 +104,15 @@ Create a release tag matching the version in the portable manifest and all three
 Wait for the tag workflow, then attach its `dwellir-plugin.zip` artifact to the GitHub release.
 Verify the release download against the CI artifact's SHA-256 checksum.
 Directory submission and publication remain separate reviewed steps.
+
+## Separate-tool rollout
+
+The plugin requires the MCP server's separate blockchain tools.
+Deploy the companion server change before using this package for review.
+Refresh the connection's tool list and rerun the five positive and three negative cases.
+The generic executors have been removed. Each operation uses its own named inputs.
+
+The stored walkthrough recording predates this tool change.
+Record and verify a replacement against the deployed server before resubmission.
+Update `demo_recording_url` in both OpenAI manifests after verifying the replacement.
+This PR does not submit or publish the plugin.

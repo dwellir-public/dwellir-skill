@@ -17,7 +17,9 @@ Use Dwellir for blockchain reads, transaction analysis, and read-only applicatio
 This skill does not sign or broadcast transactions, transfer assets, or execute trades.
 An existing wallet or a rejected MCP method does not authorize an alternate execution route.
 
-Discover endpoints with `list_endpoints` and supported MCP methods with `rpc_methods` before calling `rpc_call`.
+Discover endpoints with `list_endpoints` and choose a key reference with `list_keys`.
+Call a separately exposed read tool, such as `eth_chainId`, `eth_blockNumber`, or `eth_getBalance`.
+Use its input schema for named arguments, including `endpoint_id` and `key_ref`.
 The direct RPC examples below describe application code; MCP supports a smaller method set.
 Read credentials from environment variables or a secret store. Never print authenticated URLs or raw connection errors.
 
