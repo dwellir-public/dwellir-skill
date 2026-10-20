@@ -87,7 +87,7 @@ Use a monitored administrative address for review correspondence and `support@dw
 Verify whether a single contact field is public before choosing its address.
 
 OpenAI accepts MCP and skills together. The package embeds five positive and three negative test cases.
-These cases cover the 14-tool inventory. Run them against the saved submission with the dedicated reviewer account.
+These cases cover the 104-tool inventory. Run them against the saved submission with the dedicated reviewer account.
 The verified walkthrough URL is included in `extensions.com.openai.review.demo_recording_url`.
 Update that field when the recorded functionality changes.
 Keep credentials and sign-in instructions in OpenAI's secure reviewer fields.
@@ -104,3 +104,15 @@ Create a release tag matching the version in the portable manifest and all three
 Wait for the tag workflow, then attach its `dwellir-plugin.zip` artifact to the GitHub release.
 Verify the release download against the CI artifact's SHA-256 checksum.
 Directory submission and publication remain separate reviewed steps.
+
+## Separate-tool rollout
+
+The plugin requires Dwellir MCP 0.2.0 or later and its separate blockchain tools.
+Deploy the companion server change before using this package for review.
+Refresh the connection's tool list and rerun the five positive and three negative cases.
+The generic executors have been removed. Each operation uses its own named inputs.
+
+The stored walkthrough recording predates this tool change.
+Record and verify a replacement against the deployed server before resubmission.
+Update `demo_recording_url` in both OpenAI manifests after verifying the replacement.
+This PR does not submit or publish the plugin.

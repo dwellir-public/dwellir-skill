@@ -24,10 +24,14 @@ Users can create a Dwellir account during browser login.
 1. Discover the chain, network, node type, and transport with `list_endpoints`.
 2. Use `list_keys` to select an enabled key by name and non-secret reference.
 3. Create a named key with `create_key` when the task requires one and the connection has **Manage keys** access.
-4. Use `rpc_methods` before `rpc_call`; supported methods vary by endpoint.
-5. Use `hyperliquid_info` for supported Info queries and `capture_stream` for short WebSocket samples.
+4. Call the exposed RPC read tool, such as `eth_chainId`, `eth_blockNumber`, `eth_getBalance`, or `chain_getHeader`.
+5. Call a separate Info tool, such as `hyperliquid_meta`, or a capture tool, such as `capture_evm_new_heads`.
 6. Use `usage_summary` or `usage_history` to inspect account consumption.
 
+Read each tool's input schema and supply its named arguments.
+Pass the selected `endpoint_id` and `key_ref` to blockchain tools.
+For order book samples, use `capture_hyperliquid_l2_book` with the market `coin`.
+Each operation is exposed separately. Do not invent tools or use a generic executor.
 Queries consume the connected account's quota.
 Direct tools keep API key values on Dwellir servers.
 A key reference identifies a key within MCP; it is not a credential for application code.

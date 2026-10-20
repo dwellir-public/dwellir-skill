@@ -12,6 +12,8 @@ EXECUTION = re.compile(
     re.IGNORECASE,
 )
 
+LEGACY_TOOLS = re.compile(r"\b(?:rpc_methods|rpc_call|hyperliquid_info|capture_stream)\b")
+
 
 def validate_scope(skills: Path) -> None:
     if {p.name for p in skills.iterdir()} != SKILLS:
@@ -23,5 +25,8 @@ def validate_scope(skills: Path) -> None:
             continue
         if path.name != 'LICENSE' and path.suffix != '.md':
             raise ValueError(f'Unexpected executable or asset in submission skills: {path}')
-        if EXECUTION.search(path.read_text()):
+        content = path.read_text()
+        if LEGACY_TOOLS.search(content):
+            raise ValueError(f'Removed generic MCP tool in submission skills: {path}')
+        if EXECUTION.search(content):
             raise ValueError(f'Execution example in submission skills: {path}')
