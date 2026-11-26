@@ -105,10 +105,11 @@ Wait for the tag workflow, then attach its `dwellir-plugin.zip` artifact to the 
 Verify the release download against the CI artifact's SHA-256 checksum.
 Directory submission and publication remain separate reviewed steps.
 
-## Separate-tool rollout
+## Server requirement
 
-The plugin requires Dwellir MCP 0.2.0 or later and its separate blockchain tools.
-Deploy the companion server change before using this package for review.
+Plugin 0.4.0 requires Dwellir MCP 0.3.0 or later.
+MCP 0.3.0 adds read-only account, subscription, error log, status, request rate, method usage, and IP whitelist tools.
+Deploy the server release before using this package for review.
 Refresh the connection's tool list and rerun the five positive and three negative cases.
 The generic executors have been removed. Each operation uses its own named inputs.
 

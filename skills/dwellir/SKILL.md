@@ -27,6 +27,11 @@ Users can create a Dwellir account during browser login.
 4. Call the exposed RPC read tool, such as `eth_chainId`, `eth_blockNumber`, `eth_getBalance`, or `chain_getHeader`.
 5. Call a separate Info tool, such as `hyperliquid_meta`, or a capture tool, such as `capture_evm_new_heads`.
 6. Use `usage_summary` or `usage_history` to inspect account consumption.
+   Use `usage_rps` for request rates and `usage_methods` for a breakdown by RPC method.
+7. Use `account_info` and `account_subscription` to read plan limits, quotas, and the billing period.
+8. Diagnose failed requests with `error_log_stats`, `error_log_facets`, and `list_error_logs`.
+9. Check `status_current`, `status_incidents`, or `status_uptime` before blaming application code.
+10. Use `list_ip_whitelists` to see which key references only accept listed IP addresses.
 
 Read each tool's input schema and supply its named arguments.
 Pass the selected `endpoint_id` and `key_ref` to blockchain tools.
@@ -36,6 +41,7 @@ Queries consume the connected account's quota.
 Direct tools keep API key values on Dwellir servers.
 A key reference identifies a key within MCP; it is not a credential for application code.
 Disabling or deleting a key interrupts projects that use it.
+IP whitelist changes and subscription changes are not available through MCP.
 With **Read only** access, stop before key mutations. Explain how the user can reconnect with **Manage keys**.
 Do not use CLI credentials or another route to bypass the connection's permissions.
 Key-management permission applies to Dwellir API keys, not wallet signing or blockchain transactions.

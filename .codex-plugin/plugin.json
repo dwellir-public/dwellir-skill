@@ -1,6 +1,6 @@
 {
   "name": "dwellir",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Query blockchain data, inspect Dwellir usage, manage API keys, and build read-only data applications.",
   "author": {
     "name": "Dwellir AB",
@@ -24,7 +24,7 @@
   "interface": {
     "displayName": "Dwellir",
     "shortDescription": "Blockchain RPC tools",
-    "longDescription": "Connect your Dwellir account to discover blockchain endpoints, inspect RPC usage, and query blockchain data. Read Hyperliquid Info and capture bounded WebSocket samples. Choose read-only access or allow API key management during account approval. API keys remain on Dwellir servers; tools return non-secret references. Blockchain queries consume your Dwellir account quota. Includes developer guidance for EVM, Substrate, and Hyperliquid data applications. The plugin does not execute trades, transfer assets, sign wallet transactions, or change subscriptions. Independent application setup uses the Dwellir CLI in a coding environment.",
+    "longDescription": "Connect your Dwellir account to discover blockchain endpoints, inspect RPC usage, and query blockchain data. Review plan limits, failed requests, and Dwellir service status. Read Hyperliquid Info and capture bounded WebSocket samples. Choose read-only access or allow API key management during account approval. API keys remain on Dwellir servers; tools return non-secret references. Blockchain queries consume your Dwellir account quota. Includes developer guidance for EVM, Substrate, and Hyperliquid data applications. The plugin does not execute trades, transfer assets, sign wallet transactions, or change subscriptions. Independent application setup uses the Dwellir CLI in a coding environment.",
     "developerName": "Dwellir AB",
     "category": "Developer Tools",
     "capabilities": [
@@ -100,7 +100,7 @@
         "demo_recording_url": "https://youtu.be/St0CW8qQTxo"
       },
       "publication": {
-        "release_notes": "Replace generic blockchain executors with separately exposed RPC, Hyperliquid Info, and stream tools. Update skills and review cases for named inputs.",
+        "release_notes": "Add read-only account, subscription, error log, service status, request rate, method usage, and IP whitelist tools. Update the skill.",
         "countries": []
       }
     }

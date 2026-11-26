@@ -45,6 +45,7 @@ A skills-only installation does not configure MCP or authorize an account.
 
 - "Find the Ethereum mainnet endpoint and read the latest block number."
 - "Summarize my Dwellir RPC usage."
+- "Are any of my Dwellir requests failing, and why?"
 - "Read this account's Polkadot balance."
 - "Sample the ETH order book on Hyperliquid."
 - "Build a read-only Hyperliquid market data stream."
