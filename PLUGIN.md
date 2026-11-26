@@ -87,7 +87,7 @@ Use a monitored administrative address for review correspondence and `support@dw
 Verify whether a single contact field is public before choosing its address.
 
 OpenAI accepts MCP and skills together. The package embeds five positive and three negative test cases.
-These cases cover the 104-tool inventory. Run them against the saved submission with the dedicated reviewer account.
+These cases cover the 115-tool inventory. Run them against the saved submission with the dedicated reviewer account.
 The verified walkthrough URL is included in `extensions.com.openai.review.demo_recording_url`.
 Update that field when the recorded functionality changes.
 Keep credentials and sign-in instructions in OpenAI's secure reviewer fields.
